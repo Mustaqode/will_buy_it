@@ -17,8 +17,7 @@ class HomeScreen extends StatelessWidget {
         title: Text(
           Strings.appTitle,
           style: TextStyle(
-            fontFamily: GoogleFonts.playball().fontFamily,
-          ),
+              fontFamily: GoogleFonts.playball().fontFamily, fontSize: 22.0),
         ),
       ),
       body: Stack(alignment: Alignment.center, children: [
