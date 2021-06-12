@@ -16,6 +16,7 @@ class WillBuyIt extends StatelessWidget {
       theme: ThemeData(
           appBarTheme: const AppBarTheme(backgroundColor: Palette.colorPrimary),
           scaffoldBackgroundColor: Palette.colorPrimary,
+          primaryColor: Palette.colorPrimary,
           iconTheme: const IconThemeData(color: Colors.white),
           fontFamily: GoogleFonts.portLligatSans().fontFamily,
           textTheme: GoogleFonts.portLligatSansTextTheme()),

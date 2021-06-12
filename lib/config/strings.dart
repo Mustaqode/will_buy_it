@@ -19,4 +19,6 @@ class Strings {
   static const String hintItemDescription = 'Add a description for the item';
   static const String hintCost = '0.00';
   static const String hintAddAProductLink = 'Optional: Add a product link';
+
+  static const String errorEmptyTextField = 'Please enter something readable!';
 }
