@@ -4,6 +4,7 @@ import 'package:will_buy_it/assets/custom_icons/will_buy_it_icons_icons.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/model/models.dart';
+import 'package:will_buy_it/screens/add_wish_list_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,6 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: true,
         title: Text(
           Strings.appTitle,
           style: TextStyle(
@@ -25,7 +27,9 @@ class HomeScreen extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
               color: Palette.colorSecondary,
-              borderRadius: BorderRadius.circular(40.0)),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.0),
+                  topRight: Radius.circular(40.0))),
           child: Column(
             children: [
               CustomSlider(
@@ -81,7 +85,11 @@ class HomeScreen extends StatelessWidget {
         Positioned(bottom: 0, left: 0, right: 0, child: BlurWidget()),
         Positioned(
           bottom: 60.0,
-          child: ButtonWidget(Strings.btnTextStartAWishList, () {}),
+          child: ButtonWidget(
+              Strings.btnTextStartAWishList,
+              () => Navigator.of(context).push(MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (_) => AddWishListScreen()))),
         )
       ]),
     );

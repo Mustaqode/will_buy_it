@@ -3,14 +3,14 @@ import 'package:will_buy_it/config/palette.dart';
 
 class ButtonWidget extends StatelessWidget {
   final label;
-  final Function onClick;
+  final VoidCallback onClick;
 
   const ButtonWidget(this.label, this.onClick);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onClick(),
+      onTap: onClick,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0),
         decoration: BoxDecoration(
