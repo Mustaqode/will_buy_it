@@ -46,6 +46,7 @@ class HomeScreen extends StatelessWidget {
                         description: wishItem.listDescription,
                         cost: wishItem.totalListItemCost,
                         progress: wishItem.progress,
+                        isWishFullfilled: wishItem.isWishFullfilled,
                         onDeleteClicked: () {}))
                   ],
                 ),

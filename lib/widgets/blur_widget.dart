@@ -12,7 +12,7 @@ class BlurWidget extends StatelessWidget {
               end: Alignment.bottomCenter,
               colors: [
             Palette.progressColorInActive.withOpacity(0.01),
-            Palette.progressColorInActive
+            Palette.progressColorInActive.withOpacity(0.4)
           ])),
     );
   }
