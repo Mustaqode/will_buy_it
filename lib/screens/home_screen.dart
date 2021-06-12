@@ -37,20 +37,44 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: 24.0,
               ),
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
-                  children: [
-                    ...wishListItems.map((wishItem) => WishListCard(
-                        title: wishItem.listTitle,
-                        description: wishItem.listDescription,
-                        cost: wishItem.totalListItemCost,
-                        progress: wishItem.progress,
-                        isWishFullfilled: wishItem.isWishFullfilled,
-                        onDeleteClicked: () {}))
-                  ],
-                ),
-              )
+              wishListItems.isNotEmpty
+                  ? Expanded(
+                      child: ListView(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
+                      children: [
+                        ...wishListItems.map((wishItem) => WishListCard(
+                            title: wishItem.listTitle,
+                            description: wishItem.listDescription,
+                            cost: wishItem.totalListItemCost,
+                            progress: wishItem.progress,
+                            isWishFullfilled: wishItem.isWishFullfilled,
+                            onDeleteClicked: () {}))
+                      ],
+                    ))
+                  : Expanded(
+                      child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          WillBuyItIcons.favourite,
+                          size: 76.0,
+                          color: Palette.colorPrimary,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            Strings.tagEmptyWishListPage,
+                            style: TextStyle(
+                                fontFamily: GoogleFonts.playball().fontFamily,
+                                fontSize: 14,
+                                color: Palette.colorPrimary),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 100.0,
+                        )
+                      ],
+                    )),
             ],
           ),
         ),
