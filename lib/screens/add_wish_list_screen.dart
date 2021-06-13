@@ -13,6 +13,7 @@ class AddWishListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Palette.colorPrimary,
         appBar: AppBar(
           elevation: 0,
@@ -29,7 +30,9 @@ class AddWishListScreen extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
                 color: Palette.colorSecondary,
-                borderRadius: BorderRadius.circular(40.0)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0))),
             child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(

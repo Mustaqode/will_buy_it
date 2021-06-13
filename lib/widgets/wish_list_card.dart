@@ -22,7 +22,7 @@ class WishListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = 200.0;
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 30.0),
       height: height,
       child: Card(
         shape:

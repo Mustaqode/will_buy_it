@@ -4,11 +4,11 @@ import 'package:will_buy_it/assets/custom_icons/will_buy_it_icons_icons.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/model/models.dart';
-import 'package:will_buy_it/screens/add_wish_list_screen.dart';
-import 'package:will_buy_it/screens/wish_items_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'add_wish_list_screen.dart';
+
+class WishItemsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,18 +46,12 @@ class HomeScreen extends StatelessWidget {
                       child: ListView(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
                       children: [
-                        ...wishListItems.map((wishItem) => GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => WishItemsScreen())),
-                              child: WishListCard(
-                                  title: wishItem.listTitle,
-                                  description: wishItem.listDescription,
-                                  cost: wishItem.totalListItemCost,
-                                  progress: wishItem.progress,
-                                  isWishFullfilled: wishItem.isWishFullfilled,
-                                  onDeleteClicked: () {}),
-                            ))
+                        ...wishListItems.map((wishItem) => WishItemCard(
+                            title: wishItem.listTitle,
+                            description: wishItem.listDescription,
+                            cost: wishItem.totalListItemCost,
+                            isWishFullfilled: wishItem.isWishFullfilled,
+                            onDeleteClicked: () {}))
                       ],
                     ))
                   : Expanded(
@@ -91,7 +85,7 @@ class HomeScreen extends StatelessWidget {
         Positioned(
           bottom: 60.0,
           child: ButtonWidget(
-              Strings.btnTextStartAWishList,
+              Strings.btnTextAddAProduct,
               () => Navigator.of(context).push(MaterialPageRoute(
                   fullscreenDialog: true,
                   builder: (_) => AddWishListScreen()))),
