@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
-import 'package:will_buy_it/model/models.dart';
+import 'package:will_buy_it/data/models.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 class AddWishListScreen extends StatelessWidget {
