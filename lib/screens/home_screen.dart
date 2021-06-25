@@ -5,7 +5,7 @@ import 'package:will_buy_it/assets/custom_icons/will_buy_it_icons_icons.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/custom_wish_state.dart';
-import 'package:will_buy_it/data/models.dart';
+import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/helper/stateful_wrapper.dart';
 import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/screens/add_wish_list_screen.dart';

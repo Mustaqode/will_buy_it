@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:will_buy_it/config/constants.dart';
-import 'package:will_buy_it/data/models.dart';
+import 'package:will_buy_it/data/models/wish_item.dart';
+import 'package:will_buy_it/data/models/wish_list_item.dart';
 
 abstract class DbManager {
   Future<List<WishListItem>> getAllWishListItems();
@@ -19,7 +20,7 @@ abstract class DbManager {
 class DbManagerImpl extends DbManager {
   @override
   Future<List<WishListItem>> getAllWishListItems() async {
-    var box = await Hive.openBox(Constants.wishListBox);
+    var box = Hive.box<WishListItem>(Constants.wishListBox);
     return box.values.toList().cast<WishListItem>();
   }
 

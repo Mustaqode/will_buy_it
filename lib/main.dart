@@ -12,13 +12,35 @@ import 'package:will_buy_it/screens/home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Hive.initFlutter()
-    ..registerAdapter(WishListItemAdapter())
-    ..registerAdapter(WishItemAdapter());
+  await Hive.initFlutter();
+  Hive.registerAdapter(WishListItemAdapter());
+  Hive.registerAdapter(WishItemAdapter());
 
   await Hive.openBox<WishListItem>(Constants.wishListBox);
   await Hive.openBox<WishItem>(Constants.wishItemBox);
 
+  var box = Hive.box<WishListItem>(Constants.wishListBox);
+  List<WishListItem> wishListItems = [
+    WishListItem(
+        listTitle: 'My Home Office Setup',
+        listDescription: 'Build a home office for productivity',
+        totalListItemCost: 15000.0,
+        progress: 0.2,
+        isWishFullfilled: true),
+    WishListItem(
+        listTitle: 'My Home Office Setup',
+        listDescription: 'Build a home office for productivity',
+        totalListItemCost: 15000.0,
+        progress: 0.2,
+        isWishFullfilled: true),
+    WishListItem(
+        listTitle: 'My Home Office Setup',
+        listDescription: 'Build a home office for productivity',
+        totalListItemCost: 15000.0,
+        progress: 0.2,
+        isWishFullfilled: true),
+  ];
+  box.addAll(wishListItems);
   runApp(WillBuyIt());
 }
 

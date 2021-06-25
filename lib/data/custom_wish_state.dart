@@ -1,7 +1,11 @@
-import 'package:will_buy_it/data/models.dart';
+import 'package:will_buy_it/data/models/wish_list_item.dart';
 
 abstract class WishListState {
   const WishListState();
+}
+
+class Initial extends WishListState {
+  const Initial();
 }
 
 class Loading extends WishListState {
