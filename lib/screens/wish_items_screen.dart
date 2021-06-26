@@ -3,10 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/assets/custom_icons/will_buy_it_icons_icons.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
-import 'package:will_buy_it/data/models.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 import 'add_wish_list_screen.dart';
+
+const wishListItems = [];
 
 class WishItemsScreen extends StatelessWidget {
   @override

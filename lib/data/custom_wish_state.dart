@@ -4,10 +4,6 @@ abstract class WishListState {
   const WishListState();
 }
 
-class Initial extends WishListState {
-  const Initial();
-}
-
 class Loading extends WishListState {
   const Loading();
 }

@@ -20,19 +20,20 @@ void main() async {
   await Hive.openBox<WishItem>(Constants.wishItemBox);
 
   var box = Hive.box<WishListItem>(Constants.wishListBox);
+  box.clear();
   List<WishListItem> wishListItems = [
     WishListItem(
-        listTitle: 'My Home Office Setup',
+        listTitle: 'My Home Office Setup 2',
         listDescription: 'Build a home office for productivity',
         totalListItemCost: 15000.0,
         progress: 0.2,
-        isWishFullfilled: true),
+        isWishFullfilled: false),
     WishListItem(
         listTitle: 'My Home Office Setup',
         listDescription: 'Build a home office for productivity',
         totalListItemCost: 15000.0,
-        progress: 0.2,
-        isWishFullfilled: true),
+        progress: 0.6,
+        isWishFullfilled: false),
     WishListItem(
         listTitle: 'My Home Office Setup',
         listDescription: 'Build a home office for productivity',

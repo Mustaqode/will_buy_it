@@ -5,7 +5,7 @@ import 'package:will_buy_it/repository/wish_repo.dart';
 class WishListItemNotifier extends StateNotifier<WishListState> {
   final WishRepository wishListRepository;
 
-  WishListItemNotifier(this.wishListRepository) : super(Initial());
+  WishListItemNotifier(this.wishListRepository) : super(Loading());
 
   Future<void> getAllWishListItems() async {
     try {
