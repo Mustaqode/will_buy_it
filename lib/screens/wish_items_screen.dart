@@ -28,11 +28,22 @@ class WishItemsScreen extends StatelessWidget {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text(
-            Strings.appTitle,
-            style: TextStyle(
-                fontFamily: GoogleFonts.playball().fontFamily, fontSize: 22.0),
-          ),
+          title: Consumer(builder: (context, watch, child) {
+            var state = watch(wishItemsNotifierProvider);
+            var title = Strings.appTitle;
+            if (state is Success<WishItem>) {
+              if (state.items.isNotEmpty) {
+                title = state.items[0].listTitle;
+              }
+            }
+            return Text(
+              title,
+              style: TextStyle(
+                  fontFamily: GoogleFonts.playball().fontFamily,
+                  fontSize: 22.0),
+              overflow: TextOverflow.ellipsis,
+            );
+          }),
         ),
         body: Stack(alignment: Alignment.center, children: [
           Container(
