@@ -13,7 +13,7 @@ class StatefulWrapper extends StatefulWidget {
 class StatefulWrapperState extends State<StatefulWrapper> {
   @override
   void initState() {
-    widget.onInit();
+    Future.delayed(Duration(milliseconds: 100), () => {widget.onInit()});
     super.initState();
   }
 

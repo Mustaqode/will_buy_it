@@ -8,6 +8,8 @@ import 'package:will_buy_it/helper/pair.dart';
 abstract class WishRepository {
   Future<List<WishListItem>> getAllWishListItem();
 
+  Future<List<WishItem>> getAllWishItemOfTheList(String key);
+
   Pair<Currency, String> getAllWishesCost(List<WishListItem> wishList);
 
   Pair<Currency, String> getCostOfAllItemsOfAWishList(List<WishItem> wishList);
@@ -27,6 +29,11 @@ class WishRepositoryImpl extends WishRepository {
   @override
   Future<List<WishListItem>> getAllWishListItem() {
     return dbManager.getAllWishListItems();
+  }
+
+  @override
+  Future<List<WishItem>> getAllWishItemOfTheList(String key) {
+    return dbManager.getAllWishItemsFromAWishList(key);
   }
 
   @override

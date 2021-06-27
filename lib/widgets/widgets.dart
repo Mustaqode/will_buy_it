@@ -4,3 +4,4 @@ export 'button_widget.dart';
 export 'blur_widget.dart';
 export 'custom_text_field.dart';
 export 'wish_item_card.dart';
+export 'loader.dart';

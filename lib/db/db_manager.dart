@@ -32,9 +32,9 @@ class DbManagerImpl extends DbManager {
 
   @override
   Future<List<WishItem>> getAllWishItemsFromAWishList(String key) async {
-    var box = await Hive.openBox(Constants.wishItemBox);
+    var box = Hive.box<WishItem>(Constants.wishItemBox);
     return box.values
-        .where((e) => (e as WishItem).itemName == key)
+        .where((e) => e.listTitle == key)
         .toList()
         .cast<WishItem>();
   }

@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/assets/custom_icons/will_buy_it_icons_icons.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
-import 'package:will_buy_it/data/custom_wish_state.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
+import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/helper/stateful_wrapper.dart';
 import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/screens/add_wish_list_screen.dart';
@@ -55,17 +55,12 @@ class HomeScreen extends StatelessWidget {
                   builder: (context, watch, child) {
                     final state = watch(wishListItemsNotifierProvider);
                     if (state is Loading) {
-                      return Center(
-                          child: CircularProgressIndicator(
-                        backgroundColor: Palette.colorPrimary,
-                        valueColor: AlwaysStoppedAnimation(
-                            Palette.progressColorInActive),
-                      ));
-                    } else if (state is Success) {
-                      if (state.wishListItems.isEmpty) {
+                      return Loader();
+                    } else if (state is Success<WishListItem>) {
+                      if (state.items.isEmpty) {
                         return buildEmptyView();
                       } else {
-                        return buildWIshListItems(context, state.wishListItems);
+                        return buildWishListItems(context, state.items);
                       }
                     } else {
                       return buildEmptyView();
@@ -115,14 +110,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  ListView buildWIshListItems(
+  ListView buildWishListItems(
       BuildContext context, List<WishListItem> wishlistItemsList) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
       children: [
         ...wishlistItemsList.map((wishItem) => GestureDetector(
-              onTap: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => WishItemsScreen())),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => WishItemsScreen(wishItem.listTitle))),
               child: WishListCard(
                   title: wishItem.listTitle,
                   description: wishItem.listDescription,

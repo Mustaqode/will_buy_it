@@ -20,6 +20,7 @@ void main() async {
   await Hive.openBox<WishItem>(Constants.wishItemBox);
 
   var box = Hive.box<WishListItem>(Constants.wishListBox);
+  var box2 = Hive.box<WishItem>(Constants.wishItemBox);
   box.clear();
   List<WishListItem> wishListItems = [
     WishListItem(
@@ -41,7 +42,51 @@ void main() async {
         progress: 0.2,
         isWishFullfilled: true),
   ];
+  List<WishItem> wishItems = [
+    WishItem(
+        listTitle: 'My Home Office Setup',
+        itemName: 'Study Desk',
+        itemDescription: 'Made of teak wood',
+        itemCost: 12000,
+        itemUrl:
+            'https://www.flipkart.com/zebronics-sound-feast-50-14-w-bluetooth-speaker/p/itm454869849215f?pid=ACCFXCHH3TUPQYMP&lid=LSTACCFXCHH3TUPQYMPKFN8HD&marketplace=FLIPKART&store=0pm%2F0o7&srno=b_1_1&otracker=hp_omu_Deals%2Bof%2Bthe%2BDay_2_3.dealCard.OMU_W8C7MXYDCKQQ_3&otracker1=hp_omu_SECTIONED_manualRanking_neo%2Fmerchandising_Deals%2Bof%2Bthe%2BDay_NA_dealCard_cc_2_NA_view-all_3&fm=neo%2Fmerchandising&iid=59ba6951-b65e-4b08-a855-4a0db6a91ace.ACCFXCHH3TUPQYMP.SEARCH&ppt=browse&ppn=browse',
+        isWishFullfilled: true),
+    WishItem(
+        listTitle: 'My Home Office Setup',
+        itemName: 'Study Desk',
+        itemDescription: 'Made of teak wood',
+        itemCost: 12000,
+        itemUrl:
+            'https://www.flipkart.com/zebronics-sound-feast-50-14-w-bluetooth-speaker/p/itm454869849215f?pid=ACCFXCHH3TUPQYMP&lid=LSTACCFXCHH3TUPQYMPKFN8HD&marketplace=FLIPKART&store=0pm%2F0o7&srno=b_1_1&otracker=hp_omu_Deals%2Bof%2Bthe%2BDay_2_3.dealCard.OMU_W8C7MXYDCKQQ_3&otracker1=hp_omu_SECTIONED_manualRanking_neo%2Fmerchandising_Deals%2Bof%2Bthe%2BDay_NA_dealCard_cc_2_NA_view-all_3&fm=neo%2Fmerchandising&iid=59ba6951-b65e-4b08-a855-4a0db6a91ace.ACCFXCHH3TUPQYMP.SEARCH&ppt=browse&ppn=browse',
+        isWishFullfilled: true),
+    WishItem(
+        listTitle: 'My Home Office Setup 2',
+        itemName: 'Study Desk',
+        itemDescription: 'Made of teak wood',
+        itemCost: 12000,
+        itemUrl:
+            'https://www.flipkart.com/zebronics-sound-feast-50-14-w-bluetooth-speaker/p/itm454869849215f?pid=ACCFXCHH3TUPQYMP&lid=LSTACCFXCHH3TUPQYMPKFN8HD&marketplace=FLIPKART&store=0pm%2F0o7&srno=b_1_1&otracker=hp_omu_Deals%2Bof%2Bthe%2BDay_2_3.dealCard.OMU_W8C7MXYDCKQQ_3&otracker1=hp_omu_SECTIONED_manualRanking_neo%2Fmerchandising_Deals%2Bof%2Bthe%2BDay_NA_dealCard_cc_2_NA_view-all_3&fm=neo%2Fmerchandising&iid=59ba6951-b65e-4b08-a855-4a0db6a91ace.ACCFXCHH3TUPQYMP.SEARCH&ppt=browse&ppn=browse',
+        isWishFullfilled: false),
+    WishItem(
+        listTitle: 'My Home Office Setup',
+        itemName: 'Study Desk',
+        itemDescription: 'Made of teak wood',
+        itemCost: 12000,
+        itemUrl:
+            'https://www.flipkart.com/zebronics-sound-feast-50-14-w-bluetooth-speaker/p/itm454869849215f?pid=ACCFXCHH3TUPQYMP&lid=LSTACCFXCHH3TUPQYMPKFN8HD&marketplace=FLIPKART&store=0pm%2F0o7&srno=b_1_1&otracker=hp_omu_Deals%2Bof%2Bthe%2BDay_2_3.dealCard.OMU_W8C7MXYDCKQQ_3&otracker1=hp_omu_SECTIONED_manualRanking_neo%2Fmerchandising_Deals%2Bof%2Bthe%2BDay_NA_dealCard_cc_2_NA_view-all_3&fm=neo%2Fmerchandising&iid=59ba6951-b65e-4b08-a855-4a0db6a91ace.ACCFXCHH3TUPQYMP.SEARCH&ppt=browse&ppn=browse',
+        isWishFullfilled: false),
+    WishItem(
+        listTitle: 'My Home Office Setup',
+        itemName: 'Study Desk',
+        itemDescription: 'Made of teak wood',
+        itemCost: 12000,
+        itemUrl:
+            'https://www.flipkart.com/zebronics-sound-feast-50-14-w-bluetooth-speaker/p/itm454869849215f?pid=ACCFXCHH3TUPQYMP&lid=LSTACCFXCHH3TUPQYMPKFN8HD&marketplace=FLIPKART&store=0pm%2F0o7&srno=b_1_1&otracker=hp_omu_Deals%2Bof%2Bthe%2BDay_2_3.dealCard.OMU_W8C7MXYDCKQQ_3&otracker1=hp_omu_SECTIONED_manualRanking_neo%2Fmerchandising_Deals%2Bof%2Bthe%2BDay_NA_dealCard_cc_2_NA_view-all_3&fm=neo%2Fmerchandising&iid=59ba6951-b65e-4b08-a855-4a0db6a91ace.ACCFXCHH3TUPQYMP.SEARCH&ppt=browse&ppn=browse',
+        isWishFullfilled: true),
+  ];
+  box2.addAll(wishItems);
   box.addAll(wishListItems);
+
   runApp(WillBuyIt());
 }
 

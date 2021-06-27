@@ -2,16 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/repository/wish_repo.dart';
 
-class WishListItemNotifier extends StateNotifier<ViewState> {
+class WishItemsNotifier extends StateNotifier<ViewState> {
   final WishRepository wishListRepository;
 
-  WishListItemNotifier(this.wishListRepository) : super(Loading());
+  WishItemsNotifier(this.wishListRepository) : super(Loading());
 
-  Future<void> getAllWishListItems() async {
+  Future<void> getAllWishItems(String key) async {
     try {
       state = Loading();
-      final wishListItems = await wishListRepository.getAllWishListItem();
-      state = Success(wishListItems);
+      final wishItems = await wishListRepository.getAllWishItemOfTheList(key);
+      state = Success(wishItems);
     } catch (e) {
       state = Error("Some error");
     }
