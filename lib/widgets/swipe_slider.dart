@@ -1,7 +1,6 @@
 library slide_to_confirm;
 
 import 'package:flutter/material.dart';
-import 'package:will_buy_it/config/palette.dart';
 
 class SwipeSlider extends StatefulWidget {
   /// Height of the slider. Defaults to 70.
@@ -64,7 +63,7 @@ class SwipeSlider extends StatefulWidget {
       required this.onConfirmation,
       this.foregroundShape,
       this.backgroundShape})
-      : assert(height >= 25 && width >= 250);
+      : assert(height >= 25);
 
   @override
   State<StatefulWidget> createState() {

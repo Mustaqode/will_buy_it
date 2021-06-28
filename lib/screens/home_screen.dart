@@ -47,7 +47,8 @@ class HomeScreen extends StatelessWidget {
                   final state = watch(totalCostNotifierProvider)
                       as Pair<IconData, String>;
                   return CustomSlider(
-                    onConfirmation: () {},
+                    width: MediaQuery.of(context).size.width,
+                    onConfirmation: () => callSlideAction(context),
                     icon: state.itemOne,
                     text: state.itemTwo,
                     subText: Strings.descriptionTotalWishItemsCost,
@@ -124,7 +125,7 @@ class HomeScreen extends StatelessWidget {
               onInit: () {
                 context
                     .read(totalCostNotifierProvider.notifier)
-                    .getTotalWishCostFromHome(wishlistItemsList);
+                    .getTotalWishesCost(wishlistItemsList);
               },
               child: GestureDetector(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -140,5 +141,11 @@ class HomeScreen extends StatelessWidget {
             ))
       ],
     );
+  }
+
+  void callSlideAction(BuildContext context) {
+    {
+      context.read(totalCostNotifierProvider.notifier).slideToChangeCurrency();
+    }
   }
 }

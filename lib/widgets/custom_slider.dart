@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/widgets/swipe_slider.dart';
 
@@ -12,7 +13,7 @@ class CustomSlider extends StatelessWidget {
   final subText;
   final TextStyle textStyle;
   final TextStyle subTextStyle;
-  final Function onConfirmation;
+  final VoidCallback onConfirmation;
 
   const CustomSlider({
     required this.onConfirmation,
@@ -43,6 +44,9 @@ class CustomSlider extends StatelessWidget {
         textStyle: textStyle,
         subText: subText,
         subTextStyle: subTextStyle,
-        onConfirmation: () => onConfirmation);
+        onConfirmation: () {
+          HapticFeedback.lightImpact();
+          onConfirmation();
+        });
   }
 }

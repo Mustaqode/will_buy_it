@@ -107,7 +107,10 @@ class WishItemsScreen extends StatelessWidget {
             description: wishItem.itemDescription,
             cost: wishItem.itemCost,
             isWishFullfilled: wishItem.isWishFullfilled,
-            onDeleteClicked: () {}))
+            onDeleteClicked: () {},
+            onConfirmation: () {
+              print("Invoked");
+            }))
       ],
     );
   }

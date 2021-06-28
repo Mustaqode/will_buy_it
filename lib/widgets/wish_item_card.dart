@@ -9,13 +9,15 @@ class WishItemCard extends StatelessWidget {
   final double cost;
   final bool isWishFullfilled;
   final VoidCallback onDeleteClicked;
+  final VoidCallback onConfirmation;
 
   const WishItemCard(
       {required this.title,
       required this.description,
       required this.cost,
-      this.isWishFullfilled = true,
-      required this.onDeleteClicked});
+      required this.onDeleteClicked,
+      required this.onConfirmation,
+      this.isWishFullfilled = true});
 
   @override
   Widget build(BuildContext context) {
@@ -72,21 +74,19 @@ class WishItemCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(width: 20.0),
-                Expanded(
-                  child: CustomSlider(
-                    width: double.infinity,
-                    height: height / 5,
-                    onConfirmation: () {},
-                    icon: Icons.card_giftcard,
-                    textStyle:
-                        TextStyle(fontSize: 20.0, color: Palette.colorPrimary),
-                    text: isWishFullfilled
-                        ? Strings.btnTextUnBuy
-                        : Strings.btnTextBuy,
-                    sliderElementColor: isWishFullfilled
-                        ? Palette.sliderHeadUnBuy
-                        : Palette.progressColorActive,
-                  ),
+                CustomSlider(
+                  width: 150.0,
+                  height: height / 5,
+                  onConfirmation: onConfirmation,
+                  icon: Icons.card_giftcard,
+                  textStyle:
+                      TextStyle(fontSize: 20.0, color: Palette.colorPrimary),
+                  text: isWishFullfilled
+                      ? Strings.btnTextUnBuy
+                      : Strings.btnTextBuy,
+                  sliderElementColor: isWishFullfilled
+                      ? Palette.sliderHeadUnBuy
+                      : Palette.progressColorActive,
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.1),
                 IconButton(
