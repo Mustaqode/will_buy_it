@@ -4,9 +4,11 @@ import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
 
 abstract class DbManager {
+  Future<void> addAll(List<WishListItem> wishListItems);
   Future<List<WishListItem>> getAllWishListItems();
   Future<void> addANewWishListItem(WishListItem wishListItem);
   Future<void> deleteAWishListItem(String key);
+  Future<void> deleteAllWishListItems();
   Future<void> updateAWishListItem(WishListItem wishListItem);
 
   //Wish Items Db Operation
@@ -18,6 +20,12 @@ abstract class DbManager {
 }
 
 class DbManagerImpl extends DbManager {
+  @override
+  Future<void> addAll(List<WishListItem> wishListItems) {
+    var box = Hive.box<WishListItem>(Constants.wishListBox);
+    return box.addAll(wishListItems);
+  }
+
   @override
   Future<List<WishListItem>> getAllWishListItems() async {
     var box = Hive.box<WishListItem>(Constants.wishListBox);
@@ -61,6 +69,12 @@ class DbManagerImpl extends DbManager {
   Future<void> deleteAWishListItem(String key) async {
     var box = await Hive.openBox(Constants.wishListBox);
     box.delete(key);
+  }
+
+  @override
+  Future<void> deleteAllWishListItems() async {
+    var box = Hive.box<WishListItem>(Constants.wishListBox);
+    box.clear();
   }
 
   @override

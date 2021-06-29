@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +14,8 @@ import 'package:will_buy_it/helper/stateful_wrapper.dart';
 import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/screens/add_wish_list_screen.dart';
 import 'package:will_buy_it/screens/wish_items_screen.dart';
+import 'package:will_buy_it/widgets/platform_specific/alert_dialog.dart';
+import 'package:will_buy_it/widgets/platform_specific/cupertino_alert_dialog.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -44,13 +49,12 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 Consumer(builder: (context, watch, child) {
-                  final state = watch(totalCostNotifierProvider)
-                      as Pair<IconData, String>;
+                  final state = watch(totalCostNotifierProvider) as String;
                   return CustomSlider(
                     width: MediaQuery.of(context).size.width,
-                    onConfirmation: () => callSlideAction(context),
-                    icon: state.itemOne,
-                    text: state.itemTwo,
+                    onConfirmation: () => _callSlideAction(context),
+                    icon: Icons.delete,
+                    text: state,
                     subText: Strings.descriptionTotalWishItemsCost,
                   );
                 }),
@@ -121,31 +125,50 @@ class HomeScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
       children: [
-        ...wishlistItemsList.map((wishItem) => StatefulWrapper(
-              onInit: () {
-                context
-                    .read(totalCostNotifierProvider.notifier)
-                    .getTotalWishesCost(wishlistItemsList);
-              },
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => WishItemsScreen(wishItem.listTitle))),
-                child: WishListCard(
-                    title: wishItem.listTitle,
-                    description: wishItem.listDescription,
-                    cost: wishItem.totalListItemCost,
-                    progress: wishItem.progress,
-                    isWishFullfilled: wishItem.isWishFullfilled,
-                    onDeleteClicked: () {}),
-              ),
-            ))
+        ...wishlistItemsList.map(
+          (wishItem) => GestureDetector(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => WishItemsScreen(wishItem.listTitle))),
+            child: WishListCard(
+                title: wishItem.listTitle,
+                description: wishItem.listDescription,
+                cost: wishItem.totalListItemCost,
+                progress: wishItem.progress,
+                isWishFullfilled: wishItem.isWishFullfilled,
+                onDeleteClicked: () {}),
+          ),
+        )
       ],
     );
   }
 
-  void callSlideAction(BuildContext context) {
+  void _callSlideAction(BuildContext context) {
     {
-      context.read(totalCostNotifierProvider.notifier).slideToChangeCurrency();
+      if (Platform.isAndroid) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => new AlertDialogg(
+                title: Strings.dialogDeleteAllTitle,
+                message: Strings.dialogDeleteAllMessage,
+                positiveButtonPress: () => _onDeleteAllClicked(context)));
+      } else {
+        showCupertinoDialog(
+            context: context,
+            builder: (_) => new CupertinoAlertDialogg(
+                title: Strings.dialogDeleteAllTitle,
+                message: Strings.dialogDeleteAllMessage,
+                positiveButtonPress: () => _onDeleteAllClicked(context)));
+      }
     }
+  }
+
+  void _onDeleteAllClicked(BuildContext context) {
+    context.read(wishListItemsNotifierProvider.notifier).deleteAllWishItems();
+    Future.delayed(Duration(microseconds: 500), () {
+      context
+          .read(totalCostNotifierProvider.notifier)
+          .getTotalCostOfAllWishes();
+    });
   }
 }

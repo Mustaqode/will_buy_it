@@ -21,7 +21,7 @@ void main() async {
 
   var box = Hive.box<WishListItem>(Constants.wishListBox);
   var box2 = Hive.box<WishItem>(Constants.wishItemBox);
-  box.clear();
+
   List<WishListItem> wishListItems = [
     WishListItem(
         listTitle: 'My Home Office Setup 2',
@@ -86,6 +86,8 @@ void main() async {
   ];
   box2.addAll(wishItems);
   box.addAll(wishListItems);
+
+  // box.clear();
 
   runApp(WillBuyIt());
 }

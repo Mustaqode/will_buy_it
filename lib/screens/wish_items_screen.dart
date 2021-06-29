@@ -57,6 +57,7 @@ class WishItemsScreen extends StatelessWidget {
             child: Column(
               children: [
                 CustomSlider(
+                  width: MediaQuery.of(context).size.width,
                   onConfirmation: () {},
                   icon: WillBuyItIcons.rupee_indian,
                   text: '20,000 \$',

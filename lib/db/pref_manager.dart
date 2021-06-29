@@ -3,9 +3,9 @@ import 'package:will_buy_it/config/constants.dart';
 import 'package:will_buy_it/config/enums.dart';
 
 abstract class PreferenceManager {
-  Currency getCurrentCurrency();
+  String getCurrentCurrency();
 
-  Future<bool>? storePreferredCurrency(Currency currency);
+  Future<bool>? storePreferredCurrency(String currency);
 }
 
 class PreferenceManagerImpl extends PreferenceManager {
@@ -14,14 +14,12 @@ class PreferenceManagerImpl extends PreferenceManager {
   PreferenceManagerImpl(this.preferences);
 
   @override
-  Currency getCurrentCurrency() {
-    var currency = preferences?.getString(Constants.key_currency) ?? "";
-    return currency.isEmpty ? Currency.dollar : getCurrency(currency);
+  String getCurrentCurrency() {
+    return preferences?.getString(Constants.key_currency) ?? Constants.dollar;
   }
 
   @override
-  Future<bool>? storePreferredCurrency(Currency currency) {
-    return preferences?.setString(
-        Constants.key_currency, currency.getCurrencyString);
+  Future<bool>? storePreferredCurrency(String currency) {
+    return preferences?.setString(Constants.key_currency, currency);
   }
 }

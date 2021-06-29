@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:will_buy_it/config/constants.dart';
 
 part 'wish_item.g.dart';
 
@@ -16,6 +17,8 @@ class WishItem extends HiveObject {
   final String? itemUrl;
   @HiveField(5)
   final bool isWishFullfilled;
+  @HiveField(6)
+  final String currency;
 
   WishItem(
       {required this.listTitle,
@@ -23,5 +26,24 @@ class WishItem extends HiveObject {
       required this.itemDescription,
       required this.itemCost,
       this.itemUrl = '',
-      this.isWishFullfilled = false});
+      this.isWishFullfilled = false,
+      this.currency = Constants.dollar});
+
+  WishItem edit(
+      {String? listTitle,
+      String? itemName,
+      String? itemDescription,
+      double? itemCost,
+      String? itemUrl,
+      bool? isWishFullfilled,
+      String? currency}) {
+    return WishItem(
+        listTitle: listTitle ?? this.listTitle,
+        itemName: itemName ?? this.itemName,
+        itemDescription: itemDescription ?? this.itemDescription,
+        itemCost: itemCost ?? this.itemCost,
+        itemUrl: itemUrl ?? this.itemUrl,
+        isWishFullfilled: isWishFullfilled ?? this.isWishFullfilled,
+        currency: currency ?? this.currency);
+  }
 }

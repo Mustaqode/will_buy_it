@@ -1,4 +1,3 @@
-import 'package:will_buy_it/config/constants.dart';
 import 'package:will_buy_it/config/enums.dart';
 import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
@@ -9,16 +8,13 @@ import 'package:will_buy_it/helper/pair.dart';
 abstract class WishRepository {
   Future<List<WishListItem>> getAllWishListItem();
 
+  Future<void> deleteAllWishLists();
+
   Future<List<WishItem>> getAllWishItemOfTheList(String key);
 
-  Pair<Currency, String> getAllWishesCost(List<WishListItem> wishList);
+  String getAllWishesCost(List<WishListItem> wishList);
 
   Pair<Currency, String> getCostOfAllItemsOfAWishList(List<WishItem> wishList);
-
-  Pair<Currency, String> changeCurrencyFromWishScreen(List<WishItem> wishItem);
-
-  Pair<Currency, String> changeCurrencyFromHomeScreen(
-      List<WishListItem> wishListItem);
 }
 
 class WishRepositoryImpl extends WishRepository {
@@ -38,64 +34,30 @@ class WishRepositoryImpl extends WishRepository {
   }
 
   @override
-  Pair<Currency, String> getAllWishesCost(List<WishListItem> wishList) {
-    Currency currency = preferenceManager.getCurrentCurrency();
-    var isDollar = currency == Currency.dollar;
+  String getAllWishesCost(List<WishListItem> wishList) {
+    String currency = preferenceManager.getCurrentCurrency();
     var totalCost = 0.0;
     wishList.forEach((element) {
       totalCost = totalCost + element.totalListItemCost;
     });
-    if (isDollar)
-      return Pair(Currency.dollar, "$totalCost \$");
-    else
-      return Pair(Currency.rupee, "$totalCost ₹");
+    return "$totalCost $currency";
   }
 
   @override
   Pair<Currency, String> getCostOfAllItemsOfAWishList(
       List<WishItem> wishItemList) {
-    Currency currency = preferenceManager.getCurrentCurrency();
-    var isDollar = currency == Currency.dollar;
+    String currency = preferenceManager.getCurrentCurrency();
+    var isDollar = currency;
     var totalCost = 0.0;
     wishItemList.forEach((element) {
       totalCost = totalCost + element.itemCost;
     });
-    if (isDollar)
-      return Pair(Currency.dollar, "$totalCost \$");
-    else
-      return Pair(Currency.rupee, "$totalCost ₹");
+
+    return Pair(Currency.dollar, "$totalCost $currency");
   }
 
   @override
-  Pair<Currency, String> changeCurrencyFromWishScreen(
-      List<WishItem> wishListItem) {
-    var isDollar = preferenceManager.getCurrentCurrency() == Currency.dollar;
-    if (isDollar)
-      preferenceManager.storePreferredCurrency(Currency.rupee);
-    else
-      preferenceManager.storePreferredCurrency(Currency.dollar);
-    return getCostOfAllItemsOfAWishList(wishListItem);
-  }
-
-  @override
-  Pair<Currency, String> changeCurrencyFromHomeScreen(
-      List<WishListItem> wishListItem) {
-    var isDollar = preferenceManager.getCurrentCurrency() == Currency.dollar;
-    var totalCost = 0.0;
-    var formattedTotalCost = "";
-    Pair<Currency, String> totalCostObject;
-    wishListItem.forEach((element) {
-      totalCost = totalCost + element.totalListItemCost;
-    });
-    if (isDollar) {
-      preferenceManager.storePreferredCurrency(Currency.rupee);
-      formattedTotalCost = "${totalCost / Constants.dollar_to_rupee_value} \₹";
-      totalCostObject = Pair(Currency.rupee, formattedTotalCost);
-    } else {
-      preferenceManager.storePreferredCurrency(Currency.dollar);
-      formattedTotalCost = "${totalCost * Constants.dollar_to_rupee_value} \$";
-      totalCostObject = Pair(Currency.dollar, formattedTotalCost);
-    }
-    return totalCostObject;
+  Future<void> deleteAllWishLists() {
+    return dbManager.deleteAllWishListItems();
   }
 }

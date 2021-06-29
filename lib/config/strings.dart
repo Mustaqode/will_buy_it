@@ -21,4 +21,8 @@ class Strings {
   static const String hintAddAProductLink = 'Optional: Add a product link';
 
   static const String errorEmptyTextField = 'Please enter something readable!';
+
+  static const String dialogDeleteAllTitle = 'Are you sure?';
+  static const String dialogDeleteAllMessage =
+      'All the wishes will be deleted!';
 }
