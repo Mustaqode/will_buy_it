@@ -155,7 +155,8 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _callSlideAction(BuildContext context) {
-    {
+    final state = context.read(wishListItemsNotifierProvider);
+    if (state is Success<WishListItem> && state.items.isNotEmpty) {
       if (Platform.isAndroid) {
         showDialog(
             context: context,
