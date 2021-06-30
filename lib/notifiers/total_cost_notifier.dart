@@ -7,9 +7,10 @@ class TotalCostNotifier extends StateNotifier<String> {
 
   TotalCostNotifier(this.wishRepository) : super(" 0.0 \$");
 
-  void getTotalCostOfAllWishes() async {
-    List<WishListItem> wishListItems = await _getAllWishListItems();
-    state = wishRepository.getAllWishesCost(wishListItems);
+  void getTotalCostOfAllWishes(List<WishListItem>? wishListItems) async {
+    List<WishListItem> _wishListItems =
+        wishListItems ?? await _getAllWishListItems();
+    state = wishRepository.getAllWishesCost(_wishListItems);
   }
 
   Future<List<WishListItem>> _getAllWishListItems() {

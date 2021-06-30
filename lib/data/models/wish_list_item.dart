@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 import 'package:will_buy_it/config/constants.dart';
-import 'package:will_buy_it/config/enums.dart';
 
 part 'wish_list_item.g.dart';
 

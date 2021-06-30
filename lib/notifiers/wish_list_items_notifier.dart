@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/repository/wish_repo.dart';
 
@@ -21,10 +22,10 @@ class WishListItemNotifier extends StateNotifier<ViewState> {
     try {
       state = Loading();
       await wishListRepository.deleteAllWishLists();
-      Future.delayed(Duration(microseconds: 500), () async {
-        final wishListItems = await wishListRepository.getAllWishListItem();
-        state = Success(wishListItems);
+      await Future.delayed(Duration(milliseconds: 500), () {
+        getAllWishListItems();
       });
+      // state = Success([] as List<WishListItem>);
     } catch (e) {
       state = Error("Some error");
     }

@@ -9,7 +9,6 @@ import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
-import 'package:will_buy_it/helper/pair.dart';
 import 'package:will_buy_it/helper/stateful_wrapper.dart';
 import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/screens/add_wish_list_screen.dart';
@@ -68,12 +67,12 @@ class HomeScreen extends StatelessWidget {
                       return Loader();
                     } else if (state is Success<WishListItem>) {
                       if (state.items.isEmpty) {
-                        return buildEmptyView();
+                        return buildEmptyView(context, state.items);
                       } else {
                         return buildWishListItems(context, state.items);
                       }
                     } else {
-                      return buildEmptyView();
+                      return Loader();
                     }
                   },
                 )),
@@ -94,7 +93,13 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Column buildEmptyView() {
+  Column buildEmptyView(
+      BuildContext context, List<WishListItem> wishListItems) {
+    Future.delayed(Duration.zero, () {
+      context
+          .read(totalCostNotifierProvider.notifier)
+          .getTotalCostOfAllWishes(wishListItems);
+    });
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -126,16 +131,23 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
       children: [
         ...wishlistItemsList.map(
-          (wishItem) => GestureDetector(
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => WishItemsScreen(wishItem.listTitle))),
-            child: WishListCard(
-                title: wishItem.listTitle,
-                description: wishItem.listDescription,
-                cost: wishItem.totalListItemCost,
-                progress: wishItem.progress,
-                isWishFullfilled: wishItem.isWishFullfilled,
-                onDeleteClicked: () {}),
+          (wishItem) => StatefulWrapper(
+            onInit: () {
+              context
+                  .read(totalCostNotifierProvider.notifier)
+                  .getTotalCostOfAllWishes(wishlistItemsList);
+            },
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => WishItemsScreen(wishItem.listTitle))),
+              child: WishListCard(
+                  title: wishItem.listTitle,
+                  description: wishItem.listDescription,
+                  cost: wishItem.totalListItemCost,
+                  progress: wishItem.progress,
+                  isWishFullfilled: wishItem.isWishFullfilled,
+                  onDeleteClicked: () {}),
+            ),
           ),
         )
       ],
@@ -165,10 +177,5 @@ class HomeScreen extends StatelessWidget {
 
   void _onDeleteAllClicked(BuildContext context) {
     context.read(wishListItemsNotifierProvider.notifier).deleteAllWishItems();
-    Future.delayed(Duration(microseconds: 500), () {
-      context
-          .read(totalCostNotifierProvider.notifier)
-          .getTotalCostOfAllWishes();
-    });
   }
 }
