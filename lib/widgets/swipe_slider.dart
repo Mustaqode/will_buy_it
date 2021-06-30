@@ -1,6 +1,7 @@
 library slide_to_confirm;
 
 import 'package:flutter/material.dart';
+import 'package:will_buy_it/config/palette.dart';
 
 class SwipeSlider extends StatefulWidget {
   /// Height of the slider. Defaults to 70.
@@ -74,6 +75,7 @@ class SwipeSlider extends StatefulWidget {
 class SwipeSliderState extends State<SwipeSlider> {
   double _position = 0;
   int _duration = 0;
+  late Color _foregroundColor = widget.foregroundColor;
 
   double getPosition() {
     if (_position < 0) {
@@ -90,11 +92,13 @@ class SwipeSliderState extends State<SwipeSlider> {
       setState(() {
         _duration = 600;
         _position = 0;
+        _foregroundColor = widget.foregroundColor;
       });
     } else if (details is DragUpdateDetails) {
       setState(() {
         _duration = 0;
         _position = details.localPosition.dx - (widget.height / 2);
+        _foregroundColor = Palette.sliderHeadUnBuy;
       });
     }
   }
@@ -216,7 +220,7 @@ class SwipeSliderState extends State<SwipeSlider> {
                 decoration: BoxDecoration(
                   borderRadius: widget.foregroundShape ??
                       BorderRadius.all(Radius.circular(widget.height / 2)),
-                  color: widget.foregroundColor,
+                  color: _foregroundColor,
                 ),
                 child: Icon(
                   widget.icon,
