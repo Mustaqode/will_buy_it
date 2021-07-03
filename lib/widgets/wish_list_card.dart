@@ -6,6 +6,7 @@ class WishListCard extends StatelessWidget {
   final title;
   final description;
   final double cost;
+  final String currency;
   final double progress;
   final bool isWishFullfilled;
   final VoidCallback onDeleteClicked;
@@ -14,6 +15,7 @@ class WishListCard extends StatelessWidget {
       {required this.title,
       required this.description,
       required this.cost,
+      required this.currency,
       required this.progress,
       this.isWishFullfilled = true,
       required this.onDeleteClicked});
@@ -39,7 +41,7 @@ class WishListCard extends StatelessWidget {
                 buildText(description,
                     TextStyle(color: Palette.colorPrimary, fontSize: 18)),
                 buildText(
-                  cost.toString() + ' \$',
+                  "${cost.toString()} $currency",
                   TextStyle(
                       color: Palette.colorPrimary,
                       fontWeight: FontWeight.w400,

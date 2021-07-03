@@ -121,6 +121,7 @@ class WishItemsScreen extends StatelessWidget {
             title: wishItem.itemName,
             description: wishItem.itemDescription,
             cost: wishItem.itemCost,
+            currency: wishItem.currency,
             isWishFullfilled: wishItem.isWishFullfilled,
             onDeleteClicked: () {},
             onConfirmation: () {

@@ -27,7 +27,7 @@ class WishItem extends HiveObject {
       required this.itemCost,
       this.itemUrl = '',
       this.isWishFullfilled = false,
-      this.currency = Constants.dollar});
+      this.currency = Constants.rupee});
 
   WishItem edit(
       {String? listTitle,

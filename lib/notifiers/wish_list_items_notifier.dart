@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/repository/wish_repo.dart';
 
@@ -11,7 +12,12 @@ class WishListItemNotifier extends StateNotifier<ViewState> {
     try {
       state = Loading();
       final wishListItems = await wishListRepository.getAllWishListItem();
-      state = Success(wishListItems);
+      final currency = wishListRepository.getCurrentCurrency();
+      List<WishListItem> _wishListItems = [];
+      wishListItems.forEach((element) {
+        _wishListItems.add(element.edit(currency: currency));
+      });
+      state = Success(_wishListItems);
     } catch (e) {
       state = Error("Some error"); //Handle later
     }

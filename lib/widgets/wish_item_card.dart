@@ -7,6 +7,7 @@ class WishItemCard extends StatelessWidget {
   final title;
   final description;
   final double cost;
+  final String currency;
   final bool isWishFullfilled;
   final VoidCallback onDeleteClicked;
   final VoidCallback onConfirmation;
@@ -15,6 +16,7 @@ class WishItemCard extends StatelessWidget {
       {required this.title,
       required this.description,
       required this.cost,
+      required this.currency,
       required this.onDeleteClicked,
       required this.onConfirmation,
       this.isWishFullfilled = true});
@@ -43,7 +45,7 @@ class WishItemCard extends StatelessWidget {
                     buildText(description,
                         TextStyle(color: Palette.colorPrimary, fontSize: 18)),
                     buildText(
-                      cost.toString() + ' \$',
+                      cost.toString() + ' $currency',
                       TextStyle(
                           color: Palette.colorPrimary,
                           fontWeight: FontWeight.w400,

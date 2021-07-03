@@ -1,4 +1,3 @@
-import 'package:will_buy_it/config/enums.dart';
 import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/db/db_manager.dart';
@@ -18,6 +17,8 @@ abstract class WishRepository {
   String getAllWishesCost(List<WishListItem> wishList);
 
   String getCostOfAllItemsOfAWishList(List<WishItem> wishList);
+
+  String getCurrentCurrency();
 }
 
 class WishRepositoryImpl extends WishRepository {
@@ -27,7 +28,7 @@ class WishRepositoryImpl extends WishRepository {
   WishRepositoryImpl(this.dbManager, this.preferenceManager);
 
   @override
-  Future<List<WishListItem>> getAllWishListItem() {
+  Future<List<WishListItem>> getAllWishListItem() async {
     return dbManager.getAllWishListItems();
   }
 
@@ -70,5 +71,10 @@ class WishRepositoryImpl extends WishRepository {
   @override
   Future<void> deleteAWishListItem(String key) {
     return dbManager.deleteAWishListItem(key);
+  }
+
+  @override
+  String getCurrentCurrency() {
+    return preferenceManager.getCurrentCurrency();
   }
 }
