@@ -5,3 +5,5 @@ export 'blur_widget.dart';
 export 'custom_text_field.dart';
 export 'wish_item_card.dart';
 export 'loader.dart';
+export 'platform_specific/alert_dialog.dart';
+export 'platform_specific/cupertino_alert_dialog.dart';

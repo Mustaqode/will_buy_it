@@ -20,8 +20,14 @@ class AlertDialogg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
-      content: Text(message),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 18),
+      ),
+      content: Text(
+        message,
+        style: TextStyle(fontSize: 16),
+      ),
       backgroundColor: Palette.colorSecondary,
       actions: [
         TextButton(
@@ -31,7 +37,7 @@ class AlertDialogg extends StatelessWidget {
             },
             child: Text(
               positiveButtonText,
-              style: TextStyle(color: Palette.colorPrimary),
+              style: TextStyle(color: Palette.colorPrimary, fontSize: 16),
             )),
         TextButton(
             onPressed: () {
@@ -39,7 +45,7 @@ class AlertDialogg extends StatelessWidget {
             },
             child: Text(
               negativeButtonText,
-              style: TextStyle(color: Palette.colorPrimary),
+              style: TextStyle(color: Palette.colorPrimary, fontSize: 16),
             ))
       ],
     );

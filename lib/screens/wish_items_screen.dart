@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,12 +59,18 @@ class WishItemsScreen extends StatelessWidget {
                     topRight: Radius.circular(40.0))),
             child: Column(
               children: [
-                CustomSlider(
-                  width: MediaQuery.of(context).size.width,
-                  onConfirmation: () {},
-                  icon: WillBuyItIcons.rupee_indian,
-                  text: '20,000 \$',
-                  subText: Strings.descriptionTotalWishItemsCost,
+                Consumer(
+                  builder: (context, watch, child) {
+                    final state =
+                        watch(totalCostWishItemsNotifierProvider) as String;
+                    return CustomSlider(
+                      width: MediaQuery.of(context).size.width,
+                      onConfirmation: () => _callSlideAction(context),
+                      icon: Icons.delete,
+                      text: state,
+                      subText: Strings.descriptionTotalWishItemsCost,
+                    );
+                  },
                 ),
                 SizedBox(
                   height: 24.0,
@@ -73,12 +82,12 @@ class WishItemsScreen extends StatelessWidget {
                       return Loader();
                     } else if (state is Success<WishItem>) {
                       if (state.items.isEmpty) {
-                        return buildEmptyView();
+                        return buildEmptyView(context, state.items);
                       } else {
                         return buildWishItems(context, state.items);
                       }
                     } else {
-                      return buildEmptyView();
+                      return Loader();
                     }
                   },
                 )),
@@ -100,6 +109,11 @@ class WishItemsScreen extends StatelessWidget {
   }
 
   ListView buildWishItems(BuildContext context, List<WishItem> wishItemsList) {
+    Future.delayed(Duration.zero, () {
+      context
+          .read(totalCostWishItemsNotifierProvider.notifier)
+          .getTotalCostOfAllWishes(wishItemsList, wishItemsKey);
+    });
     return ListView(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
       children: [
@@ -116,7 +130,12 @@ class WishItemsScreen extends StatelessWidget {
     );
   }
 
-  Column buildEmptyView() {
+  Column buildEmptyView(BuildContext context, List<WishItem> wishItems) {
+    Future.delayed(Duration.zero, () {
+      context
+          .read(totalCostWishItemsNotifierProvider.notifier)
+          .getTotalCostOfAllWishes(wishItems, wishItemsKey);
+    });
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -140,5 +159,36 @@ class WishItemsScreen extends StatelessWidget {
         )
       ],
     );
+  }
+
+  void _callSlideAction(BuildContext context) {
+    final state = context.read(wishItemsNotifierProvider);
+    if (state is Success<WishItem> && state.items.isNotEmpty) {
+      if (Platform.isAndroid) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => new AlertDialogg(
+                title: Strings.dialogDeleteAllTitle,
+                message: Strings.dialogDeleteAllMessage,
+                positiveButtonPress: () => _onDeleteAllClicked(context)));
+      } else {
+        showCupertinoDialog(
+            context: context,
+            builder: (_) => new CupertinoAlertDialogg(
+                title: Strings.dialogDeleteAllTitle,
+                message: Strings.dialogDeleteAllMessage,
+                positiveButtonPress: () => _onDeleteAllClicked(context)));
+      }
+    }
+  }
+
+  void _onDeleteAllClicked(BuildContext context) {
+    context
+        .read(wishItemsNotifierProvider.notifier)
+        .deleteAllWishItems(wishItemsKey);
+    context
+        .read(wishListItemsNotifierProvider.notifier)
+        .deleteAWishListItem(wishItemsKey);
   }
 }

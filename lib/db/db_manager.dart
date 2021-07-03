@@ -7,7 +7,7 @@ abstract class DbManager {
   Future<void> addAll(List<WishListItem> wishListItems);
   Future<List<WishListItem>> getAllWishListItems();
   Future<void> addANewWishListItem(WishListItem wishListItem);
-  Future<void> deleteAWishListItem(String key);
+  Future<void> deleteAWishListItem(String wishListItemKey);
   Future<void> deleteAllWishListItems();
   Future<void> updateAWishListItem(WishListItem wishListItem);
 
@@ -16,6 +16,7 @@ abstract class DbManager {
   Future<List<WishItem>> getAllWishItemsFromAWishList(String key);
   Future<void> addANewWish(WishItem wishItem);
   Future<void> deleteAWish(String key);
+  Future<void> deleteAllItemsOfTheList(String wishItemKey);
   Future<void> updateAWish(WishItem wishItem);
 }
 
@@ -66,9 +67,15 @@ class DbManagerImpl extends DbManager {
   }
 
   @override
-  Future<void> deleteAWishListItem(String key) async {
-    var box = await Hive.openBox(Constants.wishListBox);
-    box.delete(key);
+  Future<void> deleteAWishListItem(String wishListItemKey) {
+    var box = Hive.box<WishListItem>(Constants.wishListBox);
+    dynamic desiredKey;
+    box.toMap().forEach((key, value) {
+      if (value.listTitle == wishListItemKey) {
+        desiredKey = key;
+      }
+    });
+    return box.delete(desiredKey);
   }
 
   @override
@@ -87,5 +94,18 @@ class DbManagerImpl extends DbManager {
   Future<void> updateAWishListItem(WishListItem wishListItem) async {
     var box = await Hive.openBox(Constants.wishListBox);
     box.put(wishListItem.listTitle, wishListItem);
+  }
+
+  @override
+  Future<void> deleteAllItemsOfTheList(String wishItemKey) {
+    var box = Hive.box<WishItem>(Constants.wishItemBox);
+    var boxAsMap = box.toMap();
+    List<dynamic> desiredKeys = [];
+    boxAsMap.forEach((key, value) {
+      if (value.listTitle == wishItemKey) {
+        desiredKeys.add(key);
+      }
+    });
+    return box.deleteAll(desiredKeys);
   }
 }

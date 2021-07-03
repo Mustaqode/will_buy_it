@@ -16,4 +16,16 @@ class WishItemsNotifier extends StateNotifier<ViewState> {
       state = Error("Some error");
     }
   }
+
+  Future<void> deleteAllWishItems(String key) async {
+    try {
+      state = Loading();
+      await wishListRepository.deleteAllItemsOfTheList(key);
+      await Future.delayed(Duration(milliseconds: 500), () {
+        getAllWishItems(key);
+      });
+    } catch (e) {
+      state = Error("Some error");
+    }
+  }
 }
