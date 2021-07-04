@@ -50,7 +50,7 @@ class WishRepositoryImpl extends WishRepository {
     wishList.forEach((element) {
       totalCost = totalCost + element.totalListItemCost;
     });
-    return "$totalCost $currency";
+    return "${totalCost.toStringAsFixed(2)} $currency";
   }
 
   @override
@@ -61,7 +61,7 @@ class WishRepositoryImpl extends WishRepository {
       totalCost = totalCost + element.itemCost;
     });
 
-    return "$totalCost $currency";
+    return "${totalCost.toStringAsFixed(2)} $currency";
   }
 
   @override
@@ -84,8 +84,20 @@ class WishRepositoryImpl extends WishRepository {
     return preferenceManager.getCurrentCurrency();
   }
 
+  // Add a wish item and update total cost of the parent list card.
   @override
-  Future<void> addAWishItem(WishItem wishItem) {
+  Future<void> addAWishItem(WishItem wishItem) async {
+    late WishListItem wishListOfTheItem;
+    var wishListItems = await dbManager.getAllWishListItems();
+    wishListItems.forEach((wishListItem) {
+      if (wishListItem.listTitle == wishItem.listTitle) {
+        wishListOfTheItem = wishListItem;
+      }
+    });
+    final updatedWishListItem = wishListOfTheItem.edit(
+        totalListItemCost:
+            (wishListOfTheItem.totalListItemCost + wishItem.itemCost));
+    dbManager.addOrUpdateAWishListItem(updatedWishListItem);
     return dbManager.addOrUpdateAWish(wishItem);
   }
 

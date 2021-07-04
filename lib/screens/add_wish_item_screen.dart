@@ -147,6 +147,14 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                     context
                         .read(wishItemsNotifierProvider.notifier)
                         .addAWishItem(_wishItem);
+                    Future.delayed(Duration.zero, () {
+                      context
+                          .read(wishListItemsNotifierProvider.notifier)
+                          .getAllWishListItems();
+                      context
+                          .read(totalCostNotifierProvider.notifier)
+                          .getTotalCostOfAllWishes(null);
+                    });
                     Navigator.of(context).pop();
                   } catch (e) {
                     ScaffoldMessenger.of(context)

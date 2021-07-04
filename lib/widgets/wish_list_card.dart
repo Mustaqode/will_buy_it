@@ -41,7 +41,7 @@ class WishListCard extends StatelessWidget {
                 buildText(description,
                     TextStyle(color: Palette.colorPrimary, fontSize: 18)),
                 buildText(
-                  "${cost.toString()} $currency",
+                  "${cost.toStringAsFixed(2)} $currency",
                   TextStyle(
                       color: Palette.colorPrimary,
                       fontWeight: FontWeight.w400,
