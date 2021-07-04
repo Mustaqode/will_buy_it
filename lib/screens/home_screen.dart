@@ -10,6 +10,7 @@ import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/helper/stateful_wrapper.dart';
+import 'package:will_buy_it/providers/provider_manager.dart';
 import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/screens/add_wish_list_screen.dart';
 import 'package:will_buy_it/screens/wish_items_screen.dart';
@@ -25,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read(wishListItemsNotifierProvider.notifier).getAllWishListItems();
+    ProviderManager.getAllWishListItems(context);
     super.initState();
   }
 
@@ -100,9 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Column buildEmptyView(
       BuildContext context, List<WishListItem> wishListItems) {
     Future.delayed(Duration.zero, () {
-      context
-          .read(totalCostNotifierProvider.notifier)
-          .getTotalCostOfAllWishes(wishListItems);
+      ProviderManager.getTotalCostOfAllWishLists(context, wishListItems);
     });
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -130,16 +129,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   ListView buildWishListItems(
-      BuildContext context, List<WishListItem> wishlistItemsList) {
+      BuildContext context, List<WishListItem> wishlistItems) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
       children: [
-        ...wishlistItemsList.map(
+        ...wishlistItems.map(
           (wishItem) => StatefulWrapper(
             onInit: () {
-              context
-                  .read(totalCostNotifierProvider.notifier)
-                  .getTotalCostOfAllWishes(wishlistItemsList);
+              ProviderManager.getTotalCostOfAllWishLists(
+                  context, wishlistItems);
             },
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -182,6 +180,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onDeleteAllClicked(BuildContext context) {
-    context.read(wishListItemsNotifierProvider.notifier).deleteAllWishItems();
+    ProviderManager.deleteAllWishListItems(context);
   }
 }

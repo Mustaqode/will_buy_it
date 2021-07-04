@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_item.dart';
-import 'package:will_buy_it/providers/providers.dart';
+import 'package:will_buy_it/providers/provider_manager.dart';
 import 'package:will_buy_it/screens/home_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
@@ -144,17 +143,14 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                         itemDescription: _description,
                         itemCost: _cost,
                         itemUrl: _url);
-                    context
-                        .read(wishItemsNotifierProvider.notifier)
-                        .addAWishItem(_wishItem);
+
+                    ProviderManager.addAWishItem(context, _wishItem);
+
                     Future.delayed(Duration.zero, () {
-                      context
-                          .read(wishListItemsNotifierProvider.notifier)
-                          .getAllWishListItems();
-                      context
-                          .read(totalCostNotifierProvider.notifier)
-                          .getTotalCostOfAllWishes(null);
+                      ProviderManager.getAllWishListItems(context);
+                      ProviderManager.getTotalCostOfAllWishLists(context, null);
                     });
+
                     Navigator.of(context).pop();
                   } catch (e) {
                     ScaffoldMessenger.of(context)

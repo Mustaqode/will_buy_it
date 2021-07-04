@@ -10,6 +10,7 @@ import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/helper/stateful_wrapper.dart';
+import 'package:will_buy_it/providers/provider_manager.dart';
 import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/screens/add_wish_item_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
@@ -23,9 +24,7 @@ class WishItemsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StatefulWrapper(
       onInit: () {
-        context
-            .read(wishItemsNotifierProvider.notifier)
-            .getAllWishItems(wishItemsKey);
+        ProviderManager.getAllWishItemsOfTheList(context, wishItemsKey);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -110,9 +109,8 @@ class WishItemsScreen extends StatelessWidget {
 
   ListView buildWishItems(BuildContext context, List<WishItem> wishItemsList) {
     Future.delayed(Duration.zero, () {
-      context
-          .read(totalCostWishItemsNotifierProvider.notifier)
-          .getTotalCostOfAllWishes(wishItemsList, wishItemsKey);
+      ProviderManager.getTotalCostOfAllWishesOfTheList(
+          context, wishItemsList, wishItemsKey);
     });
     return ListView(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
@@ -133,9 +131,8 @@ class WishItemsScreen extends StatelessWidget {
 
   Column buildEmptyView(BuildContext context, List<WishItem> wishItems) {
     Future.delayed(Duration.zero, () {
-      context
-          .read(totalCostWishItemsNotifierProvider.notifier)
-          .getTotalCostOfAllWishes(wishItems, wishItemsKey);
+      ProviderManager.getTotalCostOfAllWishesOfTheList(
+          context, wishItems, wishItemsKey);
     });
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -185,11 +182,7 @@ class WishItemsScreen extends StatelessWidget {
   }
 
   void _onDeleteAllClicked(BuildContext context) {
-    context
-        .read(wishItemsNotifierProvider.notifier)
-        .deleteAllWishItems(wishItemsKey);
-    context
-        .read(wishListItemsNotifierProvider.notifier)
-        .deleteAWishListItem(wishItemsKey);
+    ProviderManager.deleteAllWishItems(context, wishItemsKey);
+    ProviderManager.deleteAWishListItem(context, wishItemsKey);
   }
 }
