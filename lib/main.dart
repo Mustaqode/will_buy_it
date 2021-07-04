@@ -27,19 +27,16 @@ void main() async {
         listTitle: 'My Home Office Setup 2',
         listDescription: 'Build a home office for productivity',
         totalListItemCost: 1000.0,
-        progress: 0.2,
         isWishFullfilled: false),
     WishListItem(
         listTitle: 'My Home Office Setup which is quite expensive',
         listDescription: 'Build a home office for productivity',
         totalListItemCost: 15000.0,
-        progress: 0.6,
         isWishFullfilled: false),
     WishListItem(
         listTitle: 'My Home Office Setup 5',
         listDescription: 'Build a home office for productivity',
         totalListItemCost: 15000.0,
-        progress: 0.2,
         isWishFullfilled: true),
   ];
   List<WishItem> wishItems = [
