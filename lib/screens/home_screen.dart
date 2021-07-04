@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,86 +11,89 @@ import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/helper/stateful_wrapper.dart';
 import 'package:will_buy_it/providers/providers.dart';
-import 'package:will_buy_it/screens/add_wish_item_screen.dart';
+import 'package:will_buy_it/screens/add_wish_list_screen.dart';
 import 'package:will_buy_it/screens/wish_items_screen.dart';
 import 'package:will_buy_it/widgets/platform_specific/alert_dialog.dart';
 import 'package:will_buy_it/widgets/platform_specific/cupertino_alert_dialog.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    context.read(wishListItemsNotifierProvider.notifier).getAllWishListItems();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StatefulWrapper(
-      onInit: () {
-        context
-            .read(wishListItemsNotifierProvider.notifier)
-            .getAllWishListItems();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-            Strings.appTitle,
-            style: TextStyle(
-                fontFamily: GoogleFonts.playball().fontFamily, fontSize: 22.0),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          Strings.appTitle,
+          style: TextStyle(
+              fontFamily: GoogleFonts.playball().fontFamily, fontSize: 22.0),
+        ),
+      ),
+      body: Stack(alignment: Alignment.center, children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: Palette.colorSecondary,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.0),
+                  topRight: Radius.circular(40.0))),
+          child: Column(
+            children: [
+              Consumer(builder: (context, watch, child) {
+                final state = watch(totalCostNotifierProvider) as String;
+                return CustomSlider(
+                  width: MediaQuery.of(context).size.width,
+                  onConfirmation: () => _callSlideAction(context),
+                  icon: Icons.delete,
+                  text: state,
+                  subText: Strings.descriptionTotalWishItemsCost,
+                );
+              }),
+              SizedBox(
+                height: 24.0,
+              ),
+              Expanded(child: Consumer(
+                builder: (context, watch, child) {
+                  final state = watch(wishListItemsNotifierProvider);
+                  if (state is Loading) {
+                    return Loader();
+                  } else if (state is Success<WishListItem>) {
+                    if (state.items.isEmpty) {
+                      return buildEmptyView(context, state.items);
+                    } else {
+                      return buildWishListItems(context, state.items);
+                    }
+                  } else {
+                    return Loader();
+                  }
+                },
+              )),
+            ],
           ),
         ),
-        body: Stack(alignment: Alignment.center, children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Palette.colorSecondary,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.0),
-                    topRight: Radius.circular(40.0))),
-            child: Column(
-              children: [
-                Consumer(builder: (context, watch, child) {
-                  final state = watch(totalCostNotifierProvider) as String;
-                  return CustomSlider(
-                    width: MediaQuery.of(context).size.width,
-                    onConfirmation: () => _callSlideAction(context),
-                    icon: Icons.delete,
-                    text: state,
-                    subText: Strings.descriptionTotalWishItemsCost,
-                  );
-                }),
-                SizedBox(
-                  height: 24.0,
-                ),
-                Expanded(child: Consumer(
-                  builder: (context, watch, child) {
-                    final state = watch(wishListItemsNotifierProvider);
-                    if (state is Loading) {
-                      return Loader();
-                    } else if (state is Success<WishListItem>) {
-                      if (state.items.isEmpty) {
-                        return buildEmptyView(context, state.items);
-                      } else {
-                        return buildWishListItems(context, state.items);
-                      }
-                    } else {
-                      return Loader();
-                    }
-                  },
-                )),
-              ],
-            ),
-          ),
-          Positioned(bottom: 0, left: 0, right: 0, child: BlurWidget()),
-          Positioned(
-            bottom: 60.0,
-            child: ButtonWidget(
-                Strings.btnTextStartAWishList,
-                () => Navigator.of(context).push(MaterialPageRoute(
-                    fullscreenDialog: true,
-                    builder: (_) =>
-                        AddWishItemScreen("My Home Office Setup 5")))),
-          )
-        ]),
-      ),
+        Positioned(bottom: 0, left: 0, right: 0, child: BlurWidget()),
+        Positioned(
+          bottom: 60.0,
+          child: ButtonWidget(
+              Strings.btnTextStartAWishList,
+              () => Navigator.of(context).push(MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (_) => AddWishListScreen()))),
+        )
+      ]),
     );
   }
 

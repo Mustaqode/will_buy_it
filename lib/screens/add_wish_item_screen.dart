@@ -124,17 +124,22 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
               child: ButtonWidget(Strings.btnTextAddTheProduct, () {
                 final isValid = _formKey.currentState?.validate();
                 if (isValid ?? false) {
-                  _formKey.currentState?.save();
-                  final wishItem = WishItem(
-                      listTitle: widget.listTitle,
-                      itemName: _itemName,
-                      itemDescription: _description,
-                      itemCost: _cost,
-                      itemUrl: _url);
-                  context
-                      .read(wishItemsNotifierProvider.notifier)
-                      .addAWishItem(wishItem);
-                  Navigator.of(context).pop();
+                  try {
+                    _formKey.currentState?.save();
+                    final _wishItem = WishItem(
+                        listTitle: widget.listTitle,
+                        itemName: _itemName,
+                        itemDescription: _description,
+                        itemCost: _cost,
+                        itemUrl: _url);
+                    context
+                        .read(wishItemsNotifierProvider.notifier)
+                        .addAWishItem(_wishItem);
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(getSnackBar(true, Strings.errorUnknown));
+                  }
                 }
               })),
         ]));

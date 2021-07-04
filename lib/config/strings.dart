@@ -15,12 +15,15 @@ class Strings {
   static const String tagEmptyWishListPage = 'May all your wishes come true!';
 
   static const String hintListTitle = 'Add a list title';
+  static const String hintListDescription = 'Add a list description';
   static const String hintProductName = 'Add a wish item\'s name';
   static const String hintItemDescription = 'Add a description for the item';
   static const String hintCost = '0.00';
   static const String hintAddAProductLink = 'Optional: Add a product link';
 
   static const String errorEmptyTextField = 'Please enter something readable!';
+  static const String errorUnknown =
+      'Something is wrong. Please try that again!';
 
   static const String dialogDeleteAllTitle = 'Are you sure?';
   static const String dialogDeleteAllMessage =

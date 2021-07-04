@@ -4,7 +4,11 @@ import 'package:will_buy_it/db/db_manager.dart';
 import 'package:will_buy_it/db/pref_manager.dart';
 
 abstract class WishRepository {
+  Future<void> addAWishListItem(WishListItem wishListItem);
+
   Future<List<WishListItem>> getAllWishListItem();
+
+  Future<List<WishItem>> getAllWishItems();
 
   Future<void> deleteAWishListItem(String key);
 
@@ -83,5 +87,15 @@ class WishRepositoryImpl extends WishRepository {
   @override
   Future<void> addAWishItem(WishItem wishItem) {
     return dbManager.addOrUpdateAWish(wishItem);
+  }
+
+  @override
+  Future<void> addAWishListItem(WishListItem wishListItem) {
+    return dbManager.addOrUpdateAWishListItem(wishListItem);
+  }
+
+  @override
+  Future<List<WishItem>> getAllWishItems() {
+    return dbManager.getAllWishes();
   }
 }

@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
+import 'package:will_buy_it/providers/providers.dart';
+import 'package:will_buy_it/screens/add_wish_item_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
-class AddWishListScreen extends StatelessWidget {
+class AddWishListScreen extends StatefulWidget {
+  @override
+  _AddWishListScreenState createState() => _AddWishListScreenState();
+}
+
+class _AddWishListScreenState extends State<AddWishListScreen> {
   late final WishListItem wishListItem;
+
+  var _listTitle = "";
+  var _listDescription = "";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -53,27 +64,15 @@ class AddWishListScreen extends StatelessWidget {
                           CustomTextField(
                               hint: Strings.hintListTitle,
                               prefixIcon: Icons.group_work,
-                              onSaved: (value) {}),
+                              onSaved: (value) {
+                                _listTitle = value;
+                              }),
                           CustomTextField(
-                              hint: Strings.hintProductName,
+                              hint: Strings.hintListDescription,
                               prefixIcon: Icons.add_shopping_cart,
-                              onSaved: (value) {}),
-                          CustomTextField(
-                              hint: Strings.hintItemDescription,
-                              prefixIcon: Icons.short_text,
-                              onSaved: (value) {}),
-                          CustomTextField(
-                            hint: Strings.hintCost,
-                            prefixIcon: Icons.attach_money,
-                            onSaved: (value) {},
-                            isAmountField: true,
-                          ),
-                          CustomTextField(
-                            hint: Strings.hintAddAProductLink,
-                            prefixIcon: Icons.link,
-                            onSaved: (value) {},
-                            isUrlField: true,
-                          ),
+                              onSaved: (value) {
+                                _listDescription = value;
+                              }),
                           SizedBox(
                             height: 40.0,
                           ),
@@ -100,7 +99,25 @@ class AddWishListScreen extends StatelessWidget {
           ),
           Positioned(
               bottom: 60.0,
-              child: ButtonWidget(Strings.btnTextStartAWishList, () {})),
+              child: ButtonWidget(Strings.btnTextStartAWishList, () {
+                final isValid = _formKey.currentState?.validate();
+                if (isValid ?? false) {
+                  try {
+                    _formKey.currentState?.save();
+                    final _wishListItem = WishListItem(
+                        listTitle: _listTitle,
+                        listDescription: _listDescription);
+                    context
+                        .read(wishListItemsNotifierProvider.notifier)
+                        .addAWishListItem(_wishListItem);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => AddWishItemScreen(_listTitle)));
+                  } catch (e) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(getSnackBar(true, Strings.errorUnknown));
+                  }
+                }
+              })),
         ]));
   }
 }

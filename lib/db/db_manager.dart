@@ -33,7 +33,7 @@ class DbManagerImpl extends DbManager {
 
   @override
   Future<List<WishItem>> getAllWishes() async {
-    var box = await Hive.openBox(Constants.wishItemBox);
+    var box = Hive.box<WishItem>(Constants.wishItemBox);
     return box.values.toList().cast<WishItem>();
   }
 
@@ -57,13 +57,13 @@ class DbManagerImpl extends DbManager {
   }
 
   @override
-  Future<void> addOrUpdateAWishListItem(WishListItem wishListItem) async {
-    var box = await Hive.openBox(Constants.wishListBox);
+  Future<void> addOrUpdateAWishListItem(WishListItem wishListItem) {
+    var box = Hive.box<WishListItem>(Constants.wishListBox);
     var containsKey = box.containsKey(wishListItem.listTitle);
     if (containsKey) {
       box.delete(wishListItem.listTitle);
     }
-    box.put(wishListItem.listTitle, wishListItem);
+    return box.put(wishListItem.listTitle, wishListItem);
   }
 
   @override
