@@ -14,6 +14,8 @@ abstract class WishRepository {
 
   Future<List<WishItem>> getAllWishItemOfTheList(String key);
 
+  Future<void> addAWishItem(WishItem wishItem);
+
   String getAllWishesCost(List<WishListItem> wishList);
 
   String getCostOfAllItemsOfAWishList(List<WishItem> wishList);
@@ -76,5 +78,10 @@ class WishRepositoryImpl extends WishRepository {
   @override
   String getCurrentCurrency() {
     return preferenceManager.getCurrentCurrency();
+  }
+
+  @override
+  Future<void> addAWishItem(WishItem wishItem) {
+    return dbManager.addOrUpdateAWish(wishItem);
   }
 }

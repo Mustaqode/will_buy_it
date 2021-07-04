@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
+import 'package:will_buy_it/data/models/wish_item.dart';
+import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
-class AddWishItemScreen extends StatelessWidget {
-  final String list_title;
+class AddWishItemScreen extends StatefulWidget {
+  final String listTitle;
 
-  AddWishItemScreen(this.list_title);
+  AddWishItemScreen(this.listTitle);
 
+  @override
+  _AddWishItemScreenState createState() => _AddWishItemScreenState();
+}
+
+class _AddWishItemScreenState extends State<AddWishItemScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  var _itemName = "";
+
+  var _description = "";
+
+  var _cost = 0.0;
+
+  var _url = "";
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +60,7 @@ class AddWishItemScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            Strings.titleNewProduct,
+                            widget.listTitle,
                             style: TextStyle(
                                 color: Palette.colorPrimary, fontSize: 26.0),
                           ),
@@ -52,27 +68,31 @@ class AddWishItemScreen extends StatelessWidget {
                             height: 28.0,
                           ),
                           CustomTextField(
-                              hint: Strings.hintListTitle,
-                              prefixIcon: Icons.group_work,
-                              onSaved: (value) {}),
-                          CustomTextField(
                               hint: Strings.hintProductName,
                               prefixIcon: Icons.add_shopping_cart,
-                              onSaved: (value) {}),
+                              onSaved: (value) {
+                                _itemName = value;
+                              }),
                           CustomTextField(
                               hint: Strings.hintItemDescription,
                               prefixIcon: Icons.short_text,
-                              onSaved: (value) {}),
+                              onSaved: (value) {
+                                _description = value;
+                              }),
                           CustomTextField(
                             hint: Strings.hintCost,
                             prefixIcon: Icons.attach_money,
-                            onSaved: (value) {},
+                            onSaved: (value) {
+                              _cost = double.parse(value);
+                            },
                             isAmountField: true,
                           ),
                           CustomTextField(
                             hint: Strings.hintAddAProductLink,
                             prefixIcon: Icons.link,
-                            onSaved: (value) {},
+                            onSaved: (value) {
+                              _url = value;
+                            },
                             isUrlField: true,
                           ),
                           SizedBox(
@@ -101,7 +121,22 @@ class AddWishItemScreen extends StatelessWidget {
           ),
           Positioned(
               bottom: 60.0,
-              child: ButtonWidget(Strings.btnTextStartAWishList, () {})),
+              child: ButtonWidget(Strings.btnTextAddTheProduct, () {
+                final isValid = _formKey.currentState?.validate();
+                if (isValid ?? false) {
+                  _formKey.currentState?.save();
+                  final wishItem = WishItem(
+                      listTitle: widget.listTitle,
+                      itemName: _itemName,
+                      itemDescription: _description,
+                      itemCost: _cost,
+                      itemUrl: _url);
+                  context
+                      .read(wishItemsNotifierProvider.notifier)
+                      .addAWishItem(wishItem);
+                  Navigator.of(context).pop();
+                }
+              })),
         ]));
   }
 }

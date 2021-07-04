@@ -6,18 +6,16 @@ import 'package:will_buy_it/data/models/wish_list_item.dart';
 abstract class DbManager {
   Future<void> addAll(List<WishListItem> wishListItems);
   Future<List<WishListItem>> getAllWishListItems();
-  Future<void> addANewWishListItem(WishListItem wishListItem);
+  Future<void> addOrUpdateAWishListItem(WishListItem wishListItem);
   Future<void> deleteAWishListItem(String wishListItemKey);
   Future<void> deleteAllWishListItems();
-  Future<void> updateAWishListItem(WishListItem wishListItem);
 
   //Wish Items Db Operation
   Future<List<WishItem>> getAllWishes();
   Future<List<WishItem>> getAllWishItemsFromAWishList(String key);
-  Future<void> addANewWish(WishItem wishItem);
+  Future<void> addOrUpdateAWish(WishItem wishItem);
   Future<void> deleteAWish(String key);
   Future<void> deleteAllItemsOfTheList(String wishItemKey);
-  Future<void> updateAWish(WishItem wishItem);
 }
 
 class DbManagerImpl extends DbManager {
@@ -49,14 +47,22 @@ class DbManagerImpl extends DbManager {
   }
 
   @override
-  Future<void> addANewWish(WishItem wishItem) async {
-    var box = await Hive.openBox(Constants.wishItemBox);
-    box.put(wishItem.itemName, wishItem);
+  Future<void> addOrUpdateAWish(WishItem wishItem) {
+    var box = Hive.box<WishItem>(Constants.wishItemBox);
+    var containsKey = box.containsKey(wishItem.itemName);
+    if (containsKey) {
+      box.delete(wishItem.itemName); // Ugly way; use index instead
+    }
+    return box.put(wishItem.itemName, wishItem);
   }
 
   @override
-  Future<void> addANewWishListItem(WishListItem wishListItem) async {
+  Future<void> addOrUpdateAWishListItem(WishListItem wishListItem) async {
     var box = await Hive.openBox(Constants.wishListBox);
+    var containsKey = box.containsKey(wishListItem.listTitle);
+    if (containsKey) {
+      box.delete(wishListItem.listTitle);
+    }
     box.put(wishListItem.listTitle, wishListItem);
   }
 
@@ -82,18 +88,6 @@ class DbManagerImpl extends DbManager {
   Future<void> deleteAllWishListItems() async {
     var box = Hive.box<WishListItem>(Constants.wishListBox);
     box.clear();
-  }
-
-  @override
-  Future<void> updateAWish(WishItem wishItem) async {
-    var box = await Hive.openBox(Constants.wishItemBox);
-    box.put(wishItem.itemName, wishItem);
-  }
-
-  @override
-  Future<void> updateAWishListItem(WishListItem wishListItem) async {
-    var box = await Hive.openBox(Constants.wishListBox);
-    box.put(wishListItem.listTitle, wishListItem);
   }
 
   @override

@@ -36,7 +36,7 @@ void main() async {
         progress: 0.6,
         isWishFullfilled: false),
     WishListItem(
-        listTitle: 'My Home Office Setup',
+        listTitle: 'My Home Office Setup 5',
         listDescription: 'Build a home office for productivity',
         totalListItemCost: 15000.0,
         progress: 0.2,

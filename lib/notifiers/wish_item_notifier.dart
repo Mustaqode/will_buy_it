@@ -35,4 +35,16 @@ class WishItemsNotifier extends StateNotifier<ViewState> {
       state = Error("Some error");
     }
   }
+
+  Future<void> addAWishItem(WishItem wishItem) async {
+    try {
+      state = Loading();
+      await wishListRepository.addAWishItem(wishItem);
+      await Future.delayed(Duration(milliseconds: 500), () {
+        getAllWishItems(wishItem.listTitle);
+      });
+    } catch (e) {
+      state = Error("Some error");
+    }
+  }
 }

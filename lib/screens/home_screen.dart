@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +11,6 @@ import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/helper/stateful_wrapper.dart';
 import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/screens/add_wish_item_screen.dart';
-import 'package:will_buy_it/screens/add_wish_list_screen.dart';
 import 'package:will_buy_it/screens/wish_items_screen.dart';
 import 'package:will_buy_it/widgets/platform_specific/alert_dialog.dart';
 import 'package:will_buy_it/widgets/platform_specific/cupertino_alert_dialog.dart';
@@ -87,7 +85,8 @@ class HomeScreen extends StatelessWidget {
                 Strings.btnTextStartAWishList,
                 () => Navigator.of(context).push(MaterialPageRoute(
                     fullscreenDialog: true,
-                    builder: (_) => AddWishListScreen()))),
+                    builder: (_) =>
+                        AddWishItemScreen("My Home Office Setup 5")))),
           )
         ]),
       ),
