@@ -87,7 +87,9 @@ class DbManagerImpl extends DbManager {
   @override
   Future<void> deleteAllWishListItems() async {
     var box = Hive.box<WishListItem>(Constants.wishListBox);
+    var box2 = Hive.box<WishItem>(Constants.wishItemBox);
     box.clear();
+    box2.clear();
   }
 
   @override

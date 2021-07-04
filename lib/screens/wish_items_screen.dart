@@ -11,11 +11,11 @@ import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
 import 'package:will_buy_it/helper/stateful_wrapper.dart';
 import 'package:will_buy_it/providers/providers.dart';
+import 'package:will_buy_it/screens/add_wish_item_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
-import 'add_wish_list_screen.dart';
 
 class WishItemsScreen extends StatelessWidget {
-  final String wishItemsKey;
+  final String wishItemsKey; //list title
 
   const WishItemsScreen(this.wishItemsKey);
 
@@ -101,7 +101,7 @@ class WishItemsScreen extends StatelessWidget {
                 Strings.btnTextAddAProduct,
                 () => Navigator.of(context).push(MaterialPageRoute(
                     fullscreenDialog: true,
-                    builder: (_) => AddWishListScreen()))),
+                    builder: (_) => AddWishItemScreen(wishItemsKey)))),
           )
         ]),
       ),
