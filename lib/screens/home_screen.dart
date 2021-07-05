@@ -149,7 +149,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   currency: wishItem.currency,
                   progress: wishItem.progress,
                   isWishFullfilled: wishItem.isWishFullfilled,
-                  onDeleteClicked: () {}),
+                  onDeleteClicked: () {
+                    ProviderManager.deleteAWishListItem(
+                        context, wishItem.listTitle);
+                  }),
             ),
           ),
         )
