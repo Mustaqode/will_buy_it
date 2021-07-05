@@ -6,6 +6,7 @@ import 'package:will_buy_it/data/models/wish_list_item.dart';
 abstract class DbManager {
   Future<void> addAll(List<WishListItem> wishListItems);
   Future<List<WishListItem>> getAllWishListItems();
+  Future<WishListItem> getTheWishListItem(String key);
   Future<void> addOrUpdateAWishListItem(WishListItem wishListItem);
   Future<void> deleteAWishListItem(String wishListItemKey);
   Future<void> deleteAllWishListItems();
@@ -67,9 +68,9 @@ class DbManagerImpl extends DbManager {
   }
 
   @override
-  Future<void> deleteAWish(String key) async {
-    var box = await Hive.openBox(Constants.wishItemBox);
-    box.delete(key);
+  Future<void> deleteAWish(String key) {
+    var box = Hive.box<WishItem>(Constants.wishItemBox);
+    return box.delete(key);
   }
 
   @override
@@ -85,11 +86,11 @@ class DbManagerImpl extends DbManager {
   }
 
   @override
-  Future<void> deleteAllWishListItems() async {
+  Future<void> deleteAllWishListItems() {
     var box = Hive.box<WishListItem>(Constants.wishListBox);
     var box2 = Hive.box<WishItem>(Constants.wishItemBox);
     box.clear();
-    box2.clear();
+    return box2.clear();
   }
 
   @override
@@ -103,5 +104,11 @@ class DbManagerImpl extends DbManager {
       }
     });
     return box.deleteAll(desiredKeys);
+  }
+
+  @override
+  Future<WishListItem> getTheWishListItem(String key) async {
+    var box = Hive.box<WishListItem>(Constants.wishListBox);
+    return box.values.firstWhere((element) => element.listTitle == key);
   }
 }

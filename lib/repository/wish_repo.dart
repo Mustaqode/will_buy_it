@@ -20,6 +20,8 @@ abstract class WishRepository {
 
   Future<void> addAWishItem(WishItem wishItem);
 
+  Future<void> deleteAWishItem(WishItem key);
+
   String getAllWishesCost(List<WishListItem> wishList);
 
   String getCostOfAllItemsOfAWishList(List<WishItem> wishList);
@@ -109,5 +111,15 @@ class WishRepositoryImpl extends WishRepository {
   @override
   Future<List<WishItem>> getAllWishItems() {
     return dbManager.getAllWishes();
+  }
+
+  // Update the cost of the corresponding wishlist item while deleting a wish
+  @override
+  Future<void> deleteAWishItem(WishItem wishItem) async {
+    WishListItem item = await dbManager.getTheWishListItem(wishItem.listTitle);
+    final updatedItem = item.edit(
+        totalListItemCost: item.totalListItemCost - wishItem.itemCost);
+    await dbManager.addOrUpdateAWishListItem(updatedItem);
+    return dbManager.deleteAWish(wishItem.itemName);
   }
 }

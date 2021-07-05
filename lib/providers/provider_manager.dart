@@ -41,7 +41,9 @@ class ProviderManager {
     context.read(wishItemsNotifierProvider.notifier).deleteAllWishItems(key);
   }
 
-  static deleteAWishItem(BuildContext context, String key) {}
+  static deleteAWishItem(BuildContext context, WishItem wishItem) {
+    context.read(wishItemsNotifierProvider.notifier).deleteAWishItem(wishItem);
+  }
 
   static addAWishItem(BuildContext context, WishItem wishItem) {
     context.read(wishItemsNotifierProvider.notifier).addAWishItem(wishItem);

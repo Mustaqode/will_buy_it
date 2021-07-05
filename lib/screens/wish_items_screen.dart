@@ -121,7 +121,13 @@ class WishItemsScreen extends StatelessWidget {
             cost: wishItem.itemCost,
             currency: wishItem.currency,
             isWishFullfilled: wishItem.isWishFullfilled,
-            onDeleteClicked: () {},
+            onDeleteClicked: () {
+              ProviderManager.deleteAWishItem(context, wishItem);
+              Future.delayed(Duration.zero, () {
+                ProviderManager.getAllWishListItems(context);
+                ProviderManager.getTotalCostOfAllWishLists(context, null);
+              });
+            },
             onConfirmation: () {
               print("Invoked");
             }))
