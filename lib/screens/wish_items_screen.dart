@@ -100,7 +100,8 @@ class WishItemsScreen extends StatelessWidget {
                 Strings.btnTextAddAProduct,
                 () => Navigator.of(context).push(MaterialPageRoute(
                     fullscreenDialog: true,
-                    builder: (_) => AddWishItemScreen(wishItemsKey)))),
+                    builder: (_) =>
+                        AddWishItemScreen(listTitle: wishItemsKey)))),
           )
         ]),
       ),
@@ -115,22 +116,29 @@ class WishItemsScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
       children: [
-        ...wishItemsList.map((wishItem) => WishItemCard(
-            title: wishItem.itemName,
-            description: wishItem.itemDescription,
-            cost: wishItem.itemCost,
-            currency: wishItem.currency,
-            isWishFullfilled: wishItem.isWishFullfilled,
-            onDeleteClicked: () {
-              ProviderManager.deleteAWishItem(context, wishItem);
-              Future.delayed(Duration.zero, () {
-                ProviderManager.getAllWishListItems(context);
-                ProviderManager.getTotalCostOfAllWishLists(context, null);
-              });
-            },
-            onConfirmation: () {
-              print("Invoked");
-            }))
+        ...wishItemsList.map((wishItem) => GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => AddWishItemScreen(
+                        listTitle: wishItemsKey, wishItem: wishItem)));
+              },
+              child: WishItemCard(
+                  title: wishItem.itemName,
+                  description: wishItem.itemDescription,
+                  cost: wishItem.itemCost,
+                  currency: wishItem.currency,
+                  isWishFullfilled: wishItem.isWishFullfilled,
+                  onDeleteClicked: () {
+                    ProviderManager.deleteAWishItem(context, wishItem);
+                    Future.delayed(Duration.zero, () {
+                      ProviderManager.getAllWishListItems(context);
+                      ProviderManager.getTotalCostOfAllWishLists(context, null);
+                    });
+                  },
+                  onConfirmation: () {
+                    print("Invoked");
+                  }),
+            ))
       ],
     );
   }
@@ -189,6 +197,5 @@ class WishItemsScreen extends StatelessWidget {
 
   void _onDeleteAllClicked(BuildContext context) {
     ProviderManager.deleteAllWishItems(context, wishItemsKey);
-    ProviderManager.deleteAWishListItem(context, wishItemsKey);
   }
 }

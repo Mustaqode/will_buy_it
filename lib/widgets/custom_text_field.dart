@@ -3,6 +3,7 @@ import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
 
 class CustomTextField extends StatelessWidget {
+  final dynamic? initialValue;
   final String hint;
   final IconData prefixIcon;
   final Function onSaved;
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
       {required this.hint,
       required this.prefixIcon,
       required this.onSaved,
+      this.initialValue,
       this.isAmountField = false,
       this.isUrlField = false});
 
@@ -21,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.all(8.0),
         child: TextFormField(
+          initialValue: initialValue == null ? "" : initialValue.toString(),
           textAlignVertical: TextAlignVertical.center,
           keyboardType:
               isAmountField ? TextInputType.number : TextInputType.text,

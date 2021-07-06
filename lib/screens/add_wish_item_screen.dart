@@ -9,8 +9,9 @@ import 'package:will_buy_it/widgets/widgets.dart';
 
 class AddWishItemScreen extends StatefulWidget {
   final String listTitle;
+  final WishItem? wishItem;
 
-  AddWishItemScreen(this.listTitle);
+  AddWishItemScreen({required this.listTitle, this.wishItem});
 
   @override
   _AddWishItemScreenState createState() => _AddWishItemScreenState();
@@ -79,18 +80,27 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                             height: 28.0,
                           ),
                           CustomTextField(
+                              initialValue: widget.wishItem != null
+                                  ? widget.wishItem?.itemName
+                                  : null,
                               hint: Strings.hintProductName,
                               prefixIcon: Icons.add_shopping_cart,
                               onSaved: (value) {
                                 _itemName = value;
                               }),
                           CustomTextField(
+                              initialValue: widget.wishItem != null
+                                  ? widget.wishItem?.itemDescription
+                                  : null,
                               hint: Strings.hintItemDescription,
                               prefixIcon: Icons.short_text,
                               onSaved: (value) {
                                 _description = value;
                               }),
                           CustomTextField(
+                            initialValue: widget.wishItem != null
+                                ? widget.wishItem?.itemCost
+                                : null,
                             hint: Strings.hintCost,
                             prefixIcon: Icons.attach_money,
                             onSaved: (value) {
@@ -99,6 +109,9 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                             isAmountField: true,
                           ),
                           CustomTextField(
+                            initialValue: widget.wishItem != null
+                                ? widget.wishItem?.itemUrl
+                                : null,
                             hint: Strings.hintAddAProductLink,
                             prefixIcon: Icons.link,
                             onSaved: (value) {
@@ -132,7 +145,10 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
           ),
           Positioned(
               bottom: 60.0,
-              child: ButtonWidget(Strings.btnTextAddTheProduct, () {
+              child: ButtonWidget(
+                  widget.wishItem != null
+                      ? Strings.btnTextUpdateProduct
+                      : Strings.btnTextAddTheProduct, () {
                 final isValid = _formKey.currentState?.validate();
                 if (isValid ?? false) {
                   try {
@@ -143,8 +159,13 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                         itemDescription: _description,
                         itemCost: _cost,
                         itemUrl: _url);
-
-                    ProviderManager.addAWishItem(context, _wishItem);
+                    var _keyForUpdateOperation = widget.wishItem != null
+                        ? widget.wishItem?.itemName
+                        : null;
+                    ProviderManager.addAWishItem(
+                        context: context,
+                        wishItem: _wishItem,
+                        key: _keyForUpdateOperation);
 
                     Future.delayed(Duration.zero, () {
                       ProviderManager.getAllWishListItems(context);

@@ -35,10 +35,10 @@ class WishItemsNotifier extends StateNotifier<ViewState> {
     }
   }
 
-  Future<void> addAWishItem(WishItem wishItem) async {
+  Future<void> addAWishItem(WishItem wishItem, String? key) async {
     try {
       state = Loading();
-      await wishListRepository.addAWishItem(wishItem);
+      await wishListRepository.addAWishItem(wishItem, key);
       await Future.delayed(Duration(milliseconds: 500), () {
         getAllWishItems(wishItem.listTitle);
       });

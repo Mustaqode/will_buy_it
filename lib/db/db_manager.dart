@@ -14,7 +14,7 @@ abstract class DbManager {
   //Wish Items Db Operation
   Future<List<WishItem>> getAllWishes();
   Future<List<WishItem>> getAllWishItemsFromAWishList(String key);
-  Future<void> addOrUpdateAWish(WishItem wishItem);
+  Future<void> addOrUpdateAWish(WishItem wishItem, String? key);
   Future<void> deleteAWish(String key);
   Future<void> deleteAllItemsOfTheList(String wishItemKey);
 }
@@ -48,11 +48,13 @@ class DbManagerImpl extends DbManager {
   }
 
   @override
-  Future<void> addOrUpdateAWish(WishItem wishItem) {
+  Future<void> addOrUpdateAWish(WishItem wishItem, String? key) {
     var box = Hive.box<WishItem>(Constants.wishItemBox);
-    var containsKey = box.containsKey(wishItem.itemName);
-    if (containsKey) {
-      box.delete(wishItem.itemName); // Ugly way; use index instead
+    if (key != null) {
+      var containsKey = box.containsKey(key);
+      if (containsKey) {
+        box.delete(key); // Ugly way; use index instead
+      }
     }
     return box.put(wishItem.itemName, wishItem);
   }

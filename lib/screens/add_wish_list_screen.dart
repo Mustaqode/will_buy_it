@@ -108,7 +108,8 @@ class _AddWishListScreenState extends State<AddWishListScreen> {
                         listDescription: _listDescription);
                     ProviderManager.addAWishListItem(context, _wishListItem);
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => AddWishItemScreen(_listTitle)));
+                        builder: (_) =>
+                            AddWishItemScreen(listTitle: _listTitle)));
                   } catch (e) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(getSnackBar(true, Strings.errorUnknown));
