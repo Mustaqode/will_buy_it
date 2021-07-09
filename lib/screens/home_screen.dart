@@ -141,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => WishItemsScreen(wishItem.listTitle))),
+                  builder: (_) => WishItemsScreen(
+                      wishItem.listTitle, wishItem.listDescription))),
               child: WishListCard(
                   title: wishItem.listTitle,
                   description: wishItem.listDescription,

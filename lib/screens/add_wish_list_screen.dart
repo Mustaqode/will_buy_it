@@ -5,9 +5,14 @@ import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/providers/provider_manager.dart';
 import 'package:will_buy_it/screens/add_wish_item_screen.dart';
+import 'package:will_buy_it/screens/wish_items_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 class AddWishListScreen extends StatefulWidget {
+  final String? listTitle;
+  final String? listDescription;
+
+  AddWishListScreen({this.listTitle, this.listDescription});
   @override
   _AddWishListScreenState createState() => _AddWishListScreenState();
 }
@@ -61,12 +66,14 @@ class _AddWishListScreenState extends State<AddWishListScreen> {
                             height: 28.0,
                           ),
                           CustomTextField(
+                              initialValue: widget.listTitle,
                               hint: Strings.hintListTitle,
                               prefixIcon: Icons.group_work,
                               onSaved: (value) {
                                 _listTitle = value;
                               }),
                           CustomTextField(
+                              initialValue: widget.listDescription,
                               hint: Strings.hintListDescription,
                               prefixIcon: Icons.add_shopping_cart,
                               onSaved: (value) {
@@ -78,27 +85,15 @@ class _AddWishListScreenState extends State<AddWishListScreen> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 40.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(20.0),
-                          bottomRight: Radius.circular(20.0),
-                        ),
-                        child: Image.network(
-                          'https://picsum.photos/200/300',
-                          width: double.infinity,
-                          height: 200.0,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
                   ]),
                 )),
           ),
           Positioned(
               bottom: 60.0,
-              child: ButtonWidget(Strings.btnTextStartAWishList, () {
+              child: ButtonWidget(
+                  widget.listTitle == null
+                      ? Strings.btnTextStartAWishList
+                      : Strings.btnTextUpdateTheWishListInfo, () {
                 final isValid = _formKey.currentState?.validate();
                 if (isValid ?? false) {
                   try {
@@ -106,10 +101,19 @@ class _AddWishListScreenState extends State<AddWishListScreen> {
                     final _wishListItem = WishListItem(
                         listTitle: _listTitle,
                         listDescription: _listDescription);
-                    ProviderManager.addAWishListItem(context, _wishListItem);
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) =>
-                            AddWishItemScreen(listTitle: _listTitle)));
+                    ProviderManager.addAWishListItem(
+                        context, _wishListItem, widget.listTitle);
+                    if (widget.listTitle == null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) =>
+                              AddWishItemScreen(listTitle: _listTitle)));
+                    } else {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) =>
+                              WishItemsScreen(_listTitle, _listDescription)));
+                      ProviderManager.getAllWishItemsOfTheList(
+                          context, _listTitle);
+                    }
                   } catch (e) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(getSnackBar(true, Strings.errorUnknown));

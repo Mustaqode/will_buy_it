@@ -4,6 +4,7 @@ class Strings {
       'Total wish items\' estimated cost';
 
   static const String btnTextStartAWishList = 'Start a wish list';
+  static const String btnTextUpdateTheWishListInfo = 'Update info';
   static const String btnTextAddAProduct = 'Add a wish';
   static const String btnTextAddTheProduct = 'Add the wish';
   static const String btnTextUpdateProduct = 'Update wish';

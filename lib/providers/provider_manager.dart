@@ -54,9 +54,10 @@ class ProviderManager {
         .addAWishItem(wishItem, key);
   }
 
-  static addAWishListItem(BuildContext context, WishListItem wishListItem) {
+  static addAWishListItem(
+      BuildContext context, WishListItem wishListItem, String? key) {
     context
         .read(wishListItemsNotifierProvider.notifier)
-        .addAWishListItem(wishListItem);
+        .addAWishListItem(wishListItem, key);
   }
 }

@@ -54,6 +54,8 @@ class WishItemsNotifier extends StateNotifier<ViewState> {
       await Future.delayed(Duration(milliseconds: 500), () {
         getAllWishItems(wishItem.listTitle);
       });
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

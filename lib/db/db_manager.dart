@@ -7,13 +7,14 @@ abstract class DbManager {
   Future<void> addAll(List<WishListItem> wishListItems);
   Future<List<WishListItem>> getAllWishListItems();
   Future<WishListItem> getTheWishListItem(String key);
-  Future<void> addOrUpdateAWishListItem(WishListItem wishListItem);
+  Future<void> addOrUpdateAWishListItem(WishListItem wishListItem, String? key);
   Future<void> deleteAWishListItem(String wishListItemKey);
   Future<void> deleteAllWishListItems();
 
   //Wish Items Db Operation
   Future<List<WishItem>> getAllWishes();
   Future<List<WishItem>> getAllWishItemsFromAWishList(String key);
+  Future<void> replaceAllItemsOfAWishList(List<WishItem> wishItems, String key);
   Future<void> addOrUpdateAWish(WishItem wishItem, String? key);
   Future<void> deleteAWish(String key);
   Future<void> deleteAllItemsOfTheList(String wishItemKey);
@@ -53,18 +54,21 @@ class DbManagerImpl extends DbManager {
     if (key != null) {
       var containsKey = box.containsKey(key);
       if (containsKey) {
-        box.delete(key); // Ugly way; use index instead
+        box.delete(key); // Kinda Ugly way; use index instead
       }
     }
     return box.put(wishItem.itemName, wishItem);
   }
 
   @override
-  Future<void> addOrUpdateAWishListItem(WishListItem wishListItem) {
+  Future<void> addOrUpdateAWishListItem(
+      WishListItem wishListItem, String? key) {
     var box = Hive.box<WishListItem>(Constants.wishListBox);
-    var containsKey = box.containsKey(wishListItem.listTitle);
-    if (containsKey) {
-      box.delete(wishListItem.listTitle);
+    if (key != null) {
+      var containsKey = box.containsKey(key);
+      if (containsKey) {
+        box.delete(key); // Kinda Ugly way; use index instead
+      }
     }
     return box.put(wishListItem.listTitle, wishListItem);
   }
@@ -112,5 +116,17 @@ class DbManagerImpl extends DbManager {
   Future<WishListItem> getTheWishListItem(String key) async {
     var box = Hive.box<WishListItem>(Constants.wishListBox);
     return box.values.firstWhere((element) => element.listTitle == key);
+  }
+
+  @override
+  Future<void> replaceAllItemsOfAWishList(
+      List<WishItem> wishItems, String key) async {
+    var box = Hive.box<WishItem>(Constants.wishItemBox);
+    await deleteAllItemsOfTheList(key);
+    Map<dynamic, WishItem> wishItemsMap = {};
+    wishItems.forEach((element) {
+      wishItemsMap.putIfAbsent(element.itemName, () => element);
+    });
+    box.putAll(wishItemsMap);
   }
 }

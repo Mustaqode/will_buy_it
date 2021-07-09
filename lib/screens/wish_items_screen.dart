@@ -13,40 +13,41 @@ import 'package:will_buy_it/helper/stateful_wrapper.dart';
 import 'package:will_buy_it/providers/provider_manager.dart';
 import 'package:will_buy_it/providers/providers.dart';
 import 'package:will_buy_it/screens/add_wish_item_screen.dart';
+import 'package:will_buy_it/screens/add_wish_list_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 class WishItemsScreen extends StatelessWidget {
-  final String wishItemsKey; //list title
+  final String listTitle; //list title
+  final String listDescription;
 
-  const WishItemsScreen(this.wishItemsKey);
+  const WishItemsScreen(this.listTitle, this.listDescription);
 
   @override
   Widget build(BuildContext context) {
     return StatefulWrapper(
       onInit: () {
-        ProviderManager.getAllWishItemsOfTheList(context, wishItemsKey);
+        ProviderManager.getAllWishItemsOfTheList(context, listTitle);
       },
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: Consumer(builder: (context, watch, child) {
-            var state = watch(wishItemsNotifierProvider);
-            var title = Strings.appTitle;
-            if (state is Success<WishItem>) {
-              if (state.items.isNotEmpty) {
-                title = state.items[0].listTitle;
-              }
-            }
-            return Text(
-              title,
-              style: TextStyle(
-                  fontFamily: GoogleFonts.playball().fontFamily,
-                  fontSize: 22.0),
-              overflow: TextOverflow.ellipsis,
-            );
-          }),
-        ),
+            elevation: 0,
+            centerTitle: true,
+            title: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => AddWishListScreen(
+                          listTitle: listTitle,
+                          listDescription: listDescription,
+                        )));
+              },
+              child: Text(
+                listTitle,
+                style: TextStyle(
+                    fontFamily: GoogleFonts.playball().fontFamily,
+                    fontSize: 22.0),
+                overflow: TextOverflow.ellipsis,
+              ),
+            )),
         body: Stack(alignment: Alignment.center, children: [
           Container(
             height: MediaQuery.of(context).size.height,
@@ -100,8 +101,7 @@ class WishItemsScreen extends StatelessWidget {
                 Strings.btnTextAddAProduct,
                 () => Navigator.of(context).push(MaterialPageRoute(
                     fullscreenDialog: true,
-                    builder: (_) =>
-                        AddWishItemScreen(listTitle: wishItemsKey)))),
+                    builder: (_) => AddWishItemScreen(listTitle: listTitle)))),
           )
         ]),
       ),
@@ -111,7 +111,7 @@ class WishItemsScreen extends StatelessWidget {
   ListView buildWishItems(BuildContext context, List<WishItem> wishItemsList) {
     Future.delayed(Duration.zero, () {
       ProviderManager.getTotalCostOfAllWishesOfTheList(
-          context, wishItemsList, wishItemsKey);
+          context, wishItemsList, listTitle);
     });
     return ListView(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 120.0),
@@ -120,7 +120,7 @@ class WishItemsScreen extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => AddWishItemScreen(
-                        listTitle: wishItemsKey, wishItem: wishItem)));
+                        listTitle: listTitle, wishItem: wishItem)));
               },
               child: WishItemCard(
                   title: wishItem.itemName,
@@ -146,7 +146,7 @@ class WishItemsScreen extends StatelessWidget {
   Column buildEmptyView(BuildContext context, List<WishItem> wishItems) {
     Future.delayed(Duration.zero, () {
       ProviderManager.getTotalCostOfAllWishesOfTheList(
-          context, wishItems, wishItemsKey);
+          context, wishItems, listTitle);
     });
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -196,6 +196,6 @@ class WishItemsScreen extends StatelessWidget {
   }
 
   void _onDeleteAllClicked(BuildContext context) {
-    ProviderManager.deleteAllWishItems(context, wishItemsKey);
+    ProviderManager.deleteAllWishItems(context, listTitle);
   }
 }

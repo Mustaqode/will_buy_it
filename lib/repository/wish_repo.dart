@@ -4,7 +4,7 @@ import 'package:will_buy_it/db/db_manager.dart';
 import 'package:will_buy_it/db/pref_manager.dart';
 
 abstract class WishRepository {
-  Future<void> addAWishListItem(WishListItem wishListItem);
+  Future<void> addAWishListItem(WishListItem wishListItem, String? key);
 
   Future<List<WishListItem>> getAllWishListItem();
 
@@ -119,12 +119,32 @@ class WishRepositoryImpl extends WishRepository {
     }
 
     final updatedWishListItem = item.edit(totalListItemCost: updatedTotalCost);
-    dbManager.addOrUpdateAWishListItem(updatedWishListItem);
+    dbManager.addOrUpdateAWishListItem(updatedWishListItem, key);
   }
 
   @override
-  Future<void> addAWishListItem(WishListItem wishListItem) {
-    return dbManager.addOrUpdateAWishListItem(wishListItem);
+  Future<void> addAWishListItem(WishListItem wishListItem, String? key) async {
+    WishListItem updateWishListItem = wishListItem;
+    if (key != null) {
+      /// Copy Existing Wish List Card's info to the new updated card
+      WishListItem existingWishListItem =
+          await dbManager.getTheWishListItem(key);
+      updateWishListItem = updateWishListItem.edit(
+          totalListItemCost: existingWishListItem.totalListItemCost,
+          progress: existingWishListItem.progress,
+          isWishFullfilled: existingWishListItem.isWishFullfilled);
+
+      /// Making sure all the corresponding wishItems are updated with the new wish title
+      List<WishItem> updatedWishItems = [];
+
+      List<WishItem> wishItemsOfTheList =
+          await dbManager.getAllWishItemsFromAWishList(key);
+      wishItemsOfTheList.forEach((element) {
+        updatedWishItems.add(element.edit(listTitle: wishListItem.listTitle));
+      });
+      await dbManager.replaceAllItemsOfAWishList(updatedWishItems, key);
+    }
+    return dbManager.addOrUpdateAWishListItem(updateWishListItem, key);
   }
 
   @override
@@ -138,7 +158,7 @@ class WishRepositoryImpl extends WishRepository {
     WishListItem item = await dbManager.getTheWishListItem(wishItem.listTitle);
     final updatedItem = item.edit(
         totalListItemCost: item.totalListItemCost - wishItem.itemCost);
-    await dbManager.addOrUpdateAWishListItem(updatedItem);
+    await dbManager.addOrUpdateAWishListItem(updatedItem, null);
     return dbManager.deleteAWish(wishItem.itemName);
   }
 }
