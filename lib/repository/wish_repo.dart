@@ -89,18 +89,37 @@ class WishRepositoryImpl extends WishRepository {
   // Add a wish item and update total cost of the parent list card.
   @override
   Future<void> addAWishItem(WishItem wishItem, String? key) async {
-    late WishListItem wishListOfTheItem;
-    var wishListItems = await dbManager.getAllWishListItems();
-    wishListItems.forEach((wishListItem) {
-      if (wishListItem.listTitle == wishItem.listTitle) {
-        wishListOfTheItem = wishListItem;
-      }
-    });
-    final updatedWishListItem = wishListOfTheItem.edit(
-        totalListItemCost:
-            (wishListOfTheItem.totalListItemCost + wishItem.itemCost));
-    dbManager.addOrUpdateAWishListItem(updatedWishListItem);
+    await _updateTotalCostOfTheWishListItem(wishItem, key);
     return dbManager.addOrUpdateAWish(wishItem, key);
+  }
+
+  Future<void> _updateTotalCostOfTheWishListItem(
+      WishItem wishItem, String? key) async {
+    var existingItemCost;
+    double? updatedTotalCost;
+    WishListItem item = await dbManager.getTheWishListItem(wishItem.listTitle);
+    await dbManager
+        .getAllWishItemsFromAWishList(wishItem.listTitle)
+        .then((value) => value.forEach((element) {
+              if (element.itemName == key) {
+                existingItemCost = element.itemCost;
+              }
+            }));
+
+    if (key == null) {
+      updatedTotalCost = item.totalListItemCost + wishItem.itemCost;
+    } else if (existingItemCost != wishItem.itemCost) {
+      if (existingItemCost > wishItem.itemCost) {
+        updatedTotalCost =
+            item.totalListItemCost - (existingItemCost - wishItem.itemCost);
+      } else {
+        updatedTotalCost =
+            item.totalListItemCost + (wishItem.itemCost - existingItemCost);
+      }
+    }
+
+    final updatedWishListItem = item.edit(totalListItemCost: updatedTotalCost);
+    dbManager.addOrUpdateAWishListItem(updatedWishListItem);
   }
 
   @override
