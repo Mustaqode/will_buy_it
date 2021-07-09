@@ -40,24 +40,26 @@ class WishListCard extends StatelessWidget {
                     title, TextStyle(color: Colors.black, fontSize: 24.0)),
                 buildText(description,
                     TextStyle(color: Palette.colorPrimary, fontSize: 18)),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    buildText(
-                      "${cost.toStringAsFixed(2)} $currency",
-                      TextStyle(
-                          color: Palette.colorPrimary,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 24),
-                    ),
-                    IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: Palette.colorPrimary,
-                        ),
-                        onPressed: onDeleteClicked)
-                  ],
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      buildText(
+                        "${cost.toStringAsFixed(2)} $currency",
+                        TextStyle(
+                            color: Palette.colorPrimary,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 24),
+                      ),
+                      IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Palette.colorPrimary,
+                          ),
+                          onPressed: onDeleteClicked)
+                    ],
+                  ),
                 ),
                 ClipRRect(
                   clipBehavior: Clip.antiAlias,
