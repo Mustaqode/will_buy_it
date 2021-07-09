@@ -37,17 +37,6 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: Palette.colorPrimary,
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.close,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => HomeScreen()),
-                  (route) => false);
-            },
-          ),
           elevation: 0,
           centerTitle: true,
           title: Text(
@@ -171,7 +160,7 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                       ProviderManager.getTotalCostOfAllWishLists(context, null);
                     });
 
-                    Navigator.of(context).popAndPushNamed(Constants.routeHome);
+                    Navigator.of(context).pop();
                   } catch (e) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(getSnackBar(true, Strings.errorUnknown));
