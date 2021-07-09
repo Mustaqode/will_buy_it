@@ -3,7 +3,7 @@ import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
-class WishItemCard extends StatelessWidget {
+class WishItemCard extends StatefulWidget {
   final title;
   final description;
   final double cost;
@@ -22,8 +22,17 @@ class WishItemCard extends StatelessWidget {
       this.isWishFullfilled = true});
 
   @override
+  _WishItemCardState createState() => _WishItemCardState();
+}
+
+class _WishItemCardState extends State<WishItemCard> {
+  bool? _isWishFullfilled;
+  @override
   Widget build(BuildContext context) {
     final height = 200.0;
+    if (_isWishFullfilled == null) {
+      _isWishFullfilled = widget.isWishFullfilled;
+    }
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 30.0),
       height: height,
@@ -40,12 +49,12 @@ class WishItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    buildText(
-                        title, TextStyle(color: Colors.black, fontSize: 24.0)),
-                    buildText(description,
+                    buildText(widget.title,
+                        TextStyle(color: Colors.black, fontSize: 24.0)),
+                    buildText(widget.description,
                         TextStyle(color: Palette.colorPrimary, fontSize: 18)),
                     buildText(
-                      cost.toStringAsFixed(2) + ' $currency',
+                      widget.cost.toStringAsFixed(2) + ' ${widget.currency}',
                       TextStyle(
                           color: Palette.colorPrimary,
                           fontWeight: FontWeight.w400,
@@ -54,7 +63,7 @@ class WishItemCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (isWishFullfilled)
+              if (_isWishFullfilled ?? false)
                 Container(
                   decoration: BoxDecoration(
                       color: Palette.cardColorBought,
@@ -79,24 +88,29 @@ class WishItemCard extends StatelessWidget {
                 CustomSlider(
                   width: 150.0,
                   height: height / 5,
-                  onConfirmation: onConfirmation,
+                  onConfirmation: () {
+                    widget.onConfirmation();
+                    setState(() {
+                      _isWishFullfilled = !_isWishFullfilled!;
+                    });
+                  },
                   icon: Icons.card_giftcard,
                   textStyle:
                       TextStyle(fontSize: 20.0, color: Palette.colorPrimary),
-                  text: isWishFullfilled
+                  text: _isWishFullfilled!
                       ? Strings.btnTextUnBuy
                       : Strings.btnTextBuy,
-                  sliderElementColor: isWishFullfilled
+                  sliderElementColor: _isWishFullfilled!
                       ? Palette.sliderHeadUnBuy
                       : Palette.progressColorActive,
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.1),
                 IconButton(
                     icon: Icon(Icons.delete, color: Palette.colorPrimary),
-                    onPressed: onDeleteClicked),
+                    onPressed: widget.onDeleteClicked),
                 IconButton(
                     icon: Icon(Icons.link, color: Palette.colorPrimary),
-                    onPressed: onDeleteClicked),
+                    onPressed: widget.onDeleteClicked),
               ],
             ),
           ),

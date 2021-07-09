@@ -48,7 +48,9 @@ class WishListItemNotifier extends StateNotifier<ViewState> {
       double progress = fulfilledCount / total;
       if (progress.isNaN) progress = 0.0;
 
-      resultList.add(wishList.edit(progress: progress));
+      resultList.add(wishList.edit(
+          progress: progress,
+          isWishFullfilled: progress == 1.0 ? true : false));
 
       state = Success(resultList);
     });

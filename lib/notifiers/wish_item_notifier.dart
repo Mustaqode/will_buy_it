@@ -58,4 +58,10 @@ class WishItemsNotifier extends StateNotifier<ViewState> {
       print(e.toString());
     }
   }
+
+  Future<void> changeIsWishFullFillState(WishItem wishItem) async {
+    try {
+      await wishListRepository.changeIsWishFullFillState(wishItem);
+    } catch (e) {}
+  }
 }

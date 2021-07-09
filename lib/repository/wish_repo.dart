@@ -18,6 +18,8 @@ abstract class WishRepository {
 
   Future<List<WishItem>> getAllWishItemOfTheList(String key);
 
+  Future<void> changeIsWishFullFillState(WishItem wishItem);
+
   Future<void> addAWishItem(WishItem wishItem, String? key);
 
   Future<void> deleteAWishItem(WishItem key);
@@ -160,5 +162,12 @@ class WishRepositoryImpl extends WishRepository {
         totalListItemCost: item.totalListItemCost - wishItem.itemCost);
     await dbManager.addOrUpdateAWishListItem(updatedItem, null);
     return dbManager.deleteAWish(wishItem.itemName);
+  }
+
+  @override
+  Future<void> changeIsWishFullFillState(WishItem wishItem) {
+    final _wishItem =
+        wishItem.edit(isWishFullfilled: !wishItem.isWishFullfilled);
+    return dbManager.addOrUpdateAWish(_wishItem, null);
   }
 }

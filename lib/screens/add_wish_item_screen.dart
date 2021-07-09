@@ -6,7 +6,6 @@ import 'package:will_buy_it/config/screen_args_models.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/providers/provider_manager.dart';
-import 'package:will_buy_it/screens/home_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 class AddWishItemScreen extends StatefulWidget {

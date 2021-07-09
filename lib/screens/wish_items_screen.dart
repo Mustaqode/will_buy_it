@@ -141,7 +141,9 @@ class WishItemsScreen extends StatelessWidget {
                     });
                   },
                   onConfirmation: () {
-                    print("Invoked");
+                    ProviderManager.changeIsWishFullFillState(
+                        context, wishItem);
+                    ProviderManager.getAllWishListItems(context);
                   }),
             ))
       ],

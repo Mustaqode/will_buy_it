@@ -45,6 +45,12 @@ class ProviderManager {
     context.read(wishItemsNotifierProvider.notifier).deleteAWishItem(wishItem);
   }
 
+  static changeIsWishFullFillState(BuildContext context, WishItem wishItem) {
+    context
+        .read(wishItemsNotifierProvider.notifier)
+        .changeIsWishFullFillState(wishItem);
+  }
+
   static addAWishItem(
       {required BuildContext context,
       required WishItem wishItem,
