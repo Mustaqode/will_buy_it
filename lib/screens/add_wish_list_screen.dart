@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:will_buy_it/config/constants.dart';
 import 'package:will_buy_it/config/palette.dart';
+import 'package:will_buy_it/config/screen_args_models.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/providers/provider_manager.dart';
@@ -9,10 +11,8 @@ import 'package:will_buy_it/screens/wish_items_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 class AddWishListScreen extends StatefulWidget {
-  final String? listTitle;
-  final String? listDescription;
+  static const routeName = Constants.routeAddWishList;
 
-  AddWishListScreen({this.listTitle, this.listDescription});
   @override
   _AddWishListScreenState createState() => _AddWishListScreenState();
 }
@@ -27,6 +27,10 @@ class _AddWishListScreenState extends State<AddWishListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as AddWishListScreenArgs;
+    String? listTitle = args.listTitle;
+    String? listDescription = args.listDescription;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Palette.colorPrimary,
@@ -66,14 +70,14 @@ class _AddWishListScreenState extends State<AddWishListScreen> {
                             height: 28.0,
                           ),
                           CustomTextField(
-                              initialValue: widget.listTitle,
+                              initialValue: listTitle,
                               hint: Strings.hintListTitle,
                               prefixIcon: Icons.group_work,
                               onSaved: (value) {
                                 _listTitle = value;
                               }),
                           CustomTextField(
-                              initialValue: widget.listDescription,
+                              initialValue: listDescription,
                               hint: Strings.hintListDescription,
                               prefixIcon: Icons.add_shopping_cart,
                               onSaved: (value) {
@@ -91,7 +95,7 @@ class _AddWishListScreenState extends State<AddWishListScreen> {
           Positioned(
               bottom: 60.0,
               child: ButtonWidget(
-                  widget.listTitle == null
+                  listTitle == null
                       ? Strings.btnTextStartAWishList
                       : Strings.btnTextUpdateTheWishListInfo, () {
                 final isValid = _formKey.currentState?.validate();
@@ -102,15 +106,20 @@ class _AddWishListScreenState extends State<AddWishListScreen> {
                         listTitle: _listTitle,
                         listDescription: _listDescription);
                     ProviderManager.addAWishListItem(
-                        context, _wishListItem, widget.listTitle);
-                    if (widget.listTitle == null) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) =>
-                              AddWishItemScreen(listTitle: _listTitle)));
+                        context, _wishListItem, listTitle);
+                    if (listTitle == null) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        AddWishItemScreen.routeName,
+                        (Route route) =>
+                            route.settings.name == Constants.routeHome,
+                        arguments: AddWishItemScreenArgs(listTitle: _listTitle),
+                      );
                     } else {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) =>
-                              WishItemsScreen(_listTitle, _listDescription)));
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          WishItemsScreen.routeName,
+                          (route) => route.settings.name == Constants.routeHome,
+                          arguments: WishItemsScreenArgs(
+                              _listTitle, _listDescription));
                       ProviderManager.getAllWishItemsOfTheList(
                           context, _listTitle);
                     }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:will_buy_it/config/constants.dart';
 import 'package:will_buy_it/config/palette.dart';
+import 'package:will_buy_it/config/screen_args_models.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/providers/provider_manager.dart';
@@ -8,10 +10,7 @@ import 'package:will_buy_it/screens/home_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
 class AddWishItemScreen extends StatefulWidget {
-  final String listTitle;
-  final WishItem? wishItem;
-
-  AddWishItemScreen({required this.listTitle, this.wishItem});
+  static const routeName = Constants.routeAddWishItem;
 
   @override
   _AddWishItemScreenState createState() => _AddWishItemScreenState();
@@ -30,6 +29,10 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var args =
+        ModalRoute.of(context)?.settings.arguments as AddWishItemScreenArgs;
+    final String listTitle = args.listTitle;
+    final WishItem? wishItem = args.wishItem;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Palette.colorPrimary,
@@ -72,7 +75,7 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                       child: Column(
                         children: [
                           Text(
-                            widget.listTitle,
+                            listTitle,
                             style: TextStyle(
                                 color: Palette.colorPrimary, fontSize: 26.0),
                           ),
@@ -80,17 +83,16 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                             height: 28.0,
                           ),
                           CustomTextField(
-                              initialValue: widget.wishItem != null
-                                  ? widget.wishItem?.itemName
-                                  : null,
+                              initialValue:
+                                  wishItem != null ? wishItem.itemName : null,
                               hint: Strings.hintProductName,
                               prefixIcon: Icons.add_shopping_cart,
                               onSaved: (value) {
                                 _itemName = value;
                               }),
                           CustomTextField(
-                              initialValue: widget.wishItem != null
-                                  ? widget.wishItem?.itemDescription
+                              initialValue: wishItem != null
+                                  ? wishItem.itemDescription
                                   : null,
                               hint: Strings.hintItemDescription,
                               prefixIcon: Icons.short_text,
@@ -98,9 +100,8 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                                 _description = value;
                               }),
                           CustomTextField(
-                            initialValue: widget.wishItem != null
-                                ? widget.wishItem?.itemCost
-                                : null,
+                            initialValue:
+                                wishItem != null ? wishItem.itemCost : null,
                             hint: Strings.hintCost,
                             prefixIcon: Icons.attach_money,
                             onSaved: (value) {
@@ -109,9 +110,8 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                             isAmountField: true,
                           ),
                           CustomTextField(
-                            initialValue: widget.wishItem != null
-                                ? widget.wishItem?.itemUrl
-                                : null,
+                            initialValue:
+                                wishItem != null ? wishItem.itemUrl : null,
                             hint: Strings.hintAddAProductLink,
                             prefixIcon: Icons.link,
                             onSaved: (value) {
@@ -146,7 +146,7 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
           Positioned(
               bottom: 60.0,
               child: ButtonWidget(
-                  widget.wishItem != null
+                  wishItem != null
                       ? Strings.btnTextUpdateProduct
                       : Strings.btnTextAddTheProduct, () {
                 final isValid = _formKey.currentState?.validate();
@@ -154,14 +154,13 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                   try {
                     _formKey.currentState?.save();
                     final _wishItem = WishItem(
-                        listTitle: widget.listTitle,
+                        listTitle: listTitle,
                         itemName: _itemName,
                         itemDescription: _description,
                         itemCost: _cost,
                         itemUrl: _url);
-                    var _keyForUpdateOperation = widget.wishItem != null
-                        ? widget.wishItem?.itemName
-                        : null;
+                    var _keyForUpdateOperation =
+                        wishItem != null ? wishItem.itemName : null;
                     ProviderManager.addAWishItem(
                         context: context,
                         wishItem: _wishItem,
@@ -172,7 +171,7 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                       ProviderManager.getTotalCostOfAllWishLists(context, null);
                     });
 
-                    Navigator.of(context).pop();
+                    Navigator.of(context).popAndPushNamed(Constants.routeHome);
                   } catch (e) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(getSnackBar(true, Strings.errorUnknown));

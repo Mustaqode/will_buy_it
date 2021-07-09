@@ -7,7 +7,10 @@ import 'package:will_buy_it/config/constants.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
+import 'package:will_buy_it/screens/add_wish_item_screen.dart';
+import 'package:will_buy_it/screens/add_wish_list_screen.dart';
 import 'package:will_buy_it/screens/home_screen.dart';
+import 'package:will_buy_it/screens/wish_items_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,13 @@ class WillBuyIt extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         title: 'Will Buy It',
+        initialRoute: '/',
+        routes: {
+          Constants.routeHome: (context) => HomeScreen(),
+          WishItemsScreen.routeName: (context) => WishItemsScreen(),
+          AddWishListScreen.routeName: (context) => AddWishListScreen(),
+          AddWishItemScreen.routeName: (context) => AddWishItemScreen()
+        },
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             appBarTheme:
@@ -36,7 +46,6 @@ class WillBuyIt extends StatelessWidget {
             iconTheme: const IconThemeData(color: Colors.white),
             fontFamily: GoogleFonts.portLligatSans().fontFamily,
             textTheme: GoogleFonts.portLligatSansTextTheme()),
-        home: HomeScreen(),
       ),
     );
   }

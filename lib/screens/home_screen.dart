@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/assets/custom_icons/will_buy_it_icons_icons.dart';
 import 'package:will_buy_it/config/palette.dart';
+import 'package:will_buy_it/config/screen_args_models.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_list_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
@@ -87,13 +88,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Positioned(bottom: 0, left: 0, right: 0, child: BlurWidget()),
         Positioned(
-          bottom: 60.0,
-          child: ButtonWidget(
-              Strings.btnTextStartAWishList,
-              () => Navigator.of(context).push(MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (_) => AddWishListScreen()))),
-        )
+            bottom: 60.0,
+            child: ButtonWidget(
+                Strings.btnTextStartAWishList,
+                () => Navigator.of(context).pushNamed(
+                    AddWishListScreen.routeName,
+                    arguments: AddWishListScreenArgs(null, null)))),
       ]),
     );
   }
@@ -140,9 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   context, wishlistItems);
             },
             child: GestureDetector(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => WishItemsScreen(
-                      wishItem.listTitle, wishItem.listDescription))),
+              onTap: () => Navigator.of(context).pushNamed(
+                  WishItemsScreen.routeName,
+                  arguments: WishItemsScreenArgs(
+                      wishItem.listTitle, wishItem.listDescription)),
               child: WishListCard(
                   title: wishItem.listTitle,
                   description: wishItem.listDescription,

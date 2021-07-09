@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/assets/custom_icons/will_buy_it_icons_icons.dart';
+import 'package:will_buy_it/config/constants.dart';
 import 'package:will_buy_it/config/palette.dart';
+import 'package:will_buy_it/config/screen_args_models.dart';
 import 'package:will_buy_it/config/strings.dart';
 import 'package:will_buy_it/data/models/wish_item.dart';
 import 'package:will_buy_it/data/view_state.dart';
@@ -16,14 +18,19 @@ import 'package:will_buy_it/screens/add_wish_item_screen.dart';
 import 'package:will_buy_it/screens/add_wish_list_screen.dart';
 import 'package:will_buy_it/widgets/widgets.dart';
 
+// ignore: must_be_immutable
 class WishItemsScreen extends StatelessWidget {
-  final String listTitle; //list title
-  final String listDescription;
-
-  const WishItemsScreen(this.listTitle, this.listDescription);
+  static const routeName = Constants.routeWishItem;
+  late String listTitle;
+  late String listDescription;
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as WishItemsScreenArgs;
+    listTitle = args.listTitle;
+    listDescription = args.listDescription;
+
     return StatefulWrapper(
       onInit: () {
         ProviderManager.getAllWishItemsOfTheList(context, listTitle);
@@ -34,11 +41,9 @@ class WishItemsScreen extends StatelessWidget {
             centerTitle: true,
             title: GestureDetector(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => AddWishListScreen(
-                          listTitle: listTitle,
-                          listDescription: listDescription,
-                        )));
+                Navigator.of(context).pushNamed(AddWishListScreen.routeName,
+                    arguments:
+                        AddWishListScreenArgs(listTitle, listDescription));
               },
               child: Text(
                 listTitle,
@@ -99,9 +104,9 @@ class WishItemsScreen extends StatelessWidget {
             bottom: 60.0,
             child: ButtonWidget(
                 Strings.btnTextAddAProduct,
-                () => Navigator.of(context).push(MaterialPageRoute(
-                    fullscreenDialog: true,
-                    builder: (_) => AddWishItemScreen(listTitle: listTitle)))),
+                () => Navigator.of(context).pushNamed(
+                    AddWishItemScreen.routeName,
+                    arguments: AddWishItemScreenArgs(listTitle: listTitle))),
           )
         ]),
       ),
@@ -118,9 +123,9 @@ class WishItemsScreen extends StatelessWidget {
       children: [
         ...wishItemsList.map((wishItem) => GestureDetector(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => AddWishItemScreen(
-                        listTitle: listTitle, wishItem: wishItem)));
+                Navigator.of(context).pushNamed(AddWishItemScreen.routeName,
+                    arguments: AddWishItemScreenArgs(
+                        listTitle: listTitle, wishItem: wishItem));
               },
               child: WishItemCard(
                   title: wishItem.itemName,
