@@ -37,22 +37,28 @@ class WishItemsScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-            elevation: 0,
-            centerTitle: true,
-            title: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(AddWishListScreen.routeName,
-                    arguments:
-                        AddWishListScreenArgs(listTitle, listDescription));
-              },
-              child: Text(
-                listTitle,
-                style: TextStyle(
-                    fontFamily: GoogleFonts.playball().fontFamily,
-                    fontSize: 22.0),
-                overflow: TextOverflow.ellipsis,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: IconButton(
+                icon: Icon(Icons.edit, size: 20.0),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AddWishListScreen.routeName,
+                      arguments:
+                          AddWishListScreenArgs(listTitle, listDescription));
+                },
               ),
-            )),
+            ),
+          ],
+          centerTitle: true,
+          title: Text(
+            listTitle,
+            style: TextStyle(
+                fontFamily: GoogleFonts.playball().fontFamily, fontSize: 22.0),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         body: Stack(alignment: Alignment.center, children: [
           Container(
             height: MediaQuery.of(context).size.height,
