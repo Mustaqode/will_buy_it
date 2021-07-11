@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:will_buy_it/assets/custom_icons/will_buy_it_icons_icons.dart';
 import 'package:will_buy_it/config/constants.dart';
 import 'package:will_buy_it/config/palette.dart';
@@ -138,6 +139,7 @@ class WishItemsScreen extends StatelessWidget {
                   description: wishItem.itemDescription,
                   cost: wishItem.itemCost,
                   currency: wishItem.currency,
+                  url: wishItem.itemUrl ?? "",
                   isWishFullfilled: wishItem.isWishFullfilled,
                   onDeleteClicked: () {
                     ProviderManager.deleteAWishItem(context, wishItem);
@@ -150,6 +152,9 @@ class WishItemsScreen extends StatelessWidget {
                     ProviderManager.changeIsWishFullFillState(
                         context, wishItem);
                     ProviderManager.getAllWishListItems(context);
+                  },
+                  onUrlClicked: () async {
+                    await launch(wishItem.itemUrl!);
                   }),
             ))
       ],

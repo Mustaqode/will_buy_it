@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:will_buy_it/config/constants.dart';
 import 'package:will_buy_it/config/palette.dart';
@@ -120,12 +124,23 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                           topRight: Radius.circular(20.0),
                           bottomRight: Radius.circular(20.0),
                         ),
-                        child: Image.network(
-                          'https://picsum.photos/200/300',
-                          width: double.infinity,
-                          height: 200.0,
-                          fit: BoxFit.cover,
-                        ),
+                        child: wishItem?.itemUrl?.isNotEmpty ?? false
+                            ? FutureBuilder(
+                                future: buildImage(wishItem!.itemUrl!),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<Image> snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.none:
+                                      return Icon(Icons.image);
+                                    default:
+                                      if (snapshot.hasData) {
+                                        return snapshot.data!;
+                                      } else
+                                        return Icon(Icons.image);
+                                  }
+                                },
+                              )
+                            : Text(""), // Displaying none
                       ),
                     ),
                   ]),
@@ -167,5 +182,17 @@ class _AddWishItemScreenState extends State<AddWishItemScreen> {
                 }
               })),
         ]));
+  }
+
+  Future<Image> buildImage(String url) async {
+    final imageData =
+        await MetadataFetch.extract(url); // Doesn't work for amazon
+    final imageUrl = imageData?.image;
+    return Image.network(
+      imageUrl!,
+      width: double.infinity,
+      height: 200.0,
+      fit: BoxFit.cover,
+    );
   }
 }

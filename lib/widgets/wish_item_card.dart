@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:will_buy_it/config/palette.dart';
 import 'package:will_buy_it/config/strings.dart';
@@ -8,17 +10,21 @@ class WishItemCard extends StatefulWidget {
   final description;
   final double cost;
   final String currency;
+  final String url;
   final bool isWishFullfilled;
   final VoidCallback onDeleteClicked;
   final VoidCallback onConfirmation;
+  final VoidCallback onUrlClicked;
 
   const WishItemCard(
       {required this.title,
       required this.description,
       required this.cost,
       required this.currency,
+      required this.url,
       required this.onDeleteClicked,
       required this.onConfirmation,
+      required this.onUrlClicked,
       this.isWishFullfilled = true});
 
   @override
@@ -56,13 +62,15 @@ class _WishItemCardState extends State<WishItemCard> {
                         TextStyle(color: Colors.black, fontSize: 24.0)),
                     buildText(widget.description,
                         TextStyle(color: Palette.colorPrimary, fontSize: 18)),
-                    buildText(
-                      widget.cost.toStringAsFixed(2) + ' ${widget.currency}',
-                      TextStyle(
-                          color: Palette.colorPrimary,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 24),
-                    ),
+                    Row(children: [
+                      buildText(
+                        widget.cost.toStringAsFixed(2) + ' ${widget.currency}',
+                        TextStyle(
+                            color: Palette.colorPrimary,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 24),
+                      ),
+                    ]),
                   ],
                 ),
               ),
@@ -104,13 +112,17 @@ class _WishItemCardState extends State<WishItemCard> {
                         ? Strings.btnTextUnBuy
                         : Strings.btnTextBuy,
                     sliderElementColor: Palette.colorPrimary),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+                Expanded(
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.1)),
                 IconButton(
                     icon: Icon(Icons.delete, color: Palette.colorPrimary),
                     onPressed: widget.onDeleteClicked),
-                IconButton(
-                    icon: Icon(Icons.link, color: Palette.colorPrimary),
-                    onPressed: widget.onDeleteClicked),
+                if (widget.url != "")
+                  IconButton(
+                      icon: Icon(Icons.link, color: Palette.colorPrimary),
+                      onPressed: widget.onUrlClicked),
+                SizedBox(width: 10.0)
               ],
             ),
           ),

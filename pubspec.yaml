@@ -28,8 +28,10 @@ dependencies:
   google_fonts: ^2.0.0
   hive: ^2.0.4
   hive_flutter: ^1.0.0
+  metadata_fetch: ^0.4.1
   percent_indicator: ^3.0.1
   shared_preferences: ^2.0.6
+  url_launcher: ^6.0.9
 
 dev_dependencies:
   flutter_test:
