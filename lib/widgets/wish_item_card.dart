@@ -28,11 +28,14 @@ class WishItemCard extends StatefulWidget {
 class _WishItemCardState extends State<WishItemCard> {
   bool? _isWishFullfilled;
   @override
+  void initState() {
+    _isWishFullfilled = _isWishFullfilled ?? widget.isWishFullfilled;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final height = 200.0;
-    if (_isWishFullfilled == null) {
-      _isWishFullfilled = widget.isWishFullfilled;
-    }
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 30.0),
       height: height,
@@ -86,24 +89,21 @@ class _WishItemCardState extends State<WishItemCard> {
               children: [
                 SizedBox(width: 20.0),
                 CustomSlider(
-                  width: 150.0,
-                  height: height / 5,
-                  onConfirmation: () {
-                    widget.onConfirmation();
-                    setState(() {
-                      _isWishFullfilled = !_isWishFullfilled!;
-                    });
-                  },
-                  icon: Icons.card_giftcard,
-                  textStyle:
-                      TextStyle(fontSize: 20.0, color: Palette.colorPrimary),
-                  text: _isWishFullfilled!
-                      ? Strings.btnTextUnBuy
-                      : Strings.btnTextBuy,
-                  sliderElementColor: _isWishFullfilled!
-                      ? Palette.sliderHeadUnBuy
-                      : Palette.progressColorActive,
-                ),
+                    width: 150.0,
+                    height: height / 5,
+                    onConfirmation: () {
+                      widget.onConfirmation();
+                      setState(() {
+                        _isWishFullfilled = !_isWishFullfilled!;
+                      });
+                    },
+                    icon: Icons.card_giftcard,
+                    textStyle:
+                        TextStyle(fontSize: 20.0, color: Palette.colorPrimary),
+                    text: _isWishFullfilled!
+                        ? Strings.btnTextUnBuy
+                        : Strings.btnTextBuy,
+                    sliderElementColor: Palette.colorPrimary),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.1),
                 IconButton(
                     icon: Icon(Icons.delete, color: Palette.colorPrimary),

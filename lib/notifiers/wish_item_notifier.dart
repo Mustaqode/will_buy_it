@@ -62,6 +62,7 @@ class WishItemsNotifier extends StateNotifier<ViewState> {
   Future<void> changeIsWishFullFillState(WishItem wishItem) async {
     try {
       await wishListRepository.changeIsWishFullFillState(wishItem);
+      getAllWishItems(wishItem.listTitle);
     } catch (e) {}
   }
 }

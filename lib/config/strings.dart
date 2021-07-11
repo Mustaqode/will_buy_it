@@ -8,8 +8,8 @@ class Strings {
   static const String btnTextAddAProduct = 'Add a wish';
   static const String btnTextAddTheProduct = 'Add the wish';
   static const String btnTextUpdateProduct = 'Update wish';
-  static const String btnTextBuy = 'Buy';
-  static const String btnTextUnBuy = 'Un-Buy';
+  static const String btnTextBuy = 'Done';
+  static const String btnTextUnBuy = 'Un-Done';
 
   static const String titleNewProduct = 'New Product';
   static const String titleNewWishList = 'New Wish List';
