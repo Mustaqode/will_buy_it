@@ -45,3 +45,6 @@ flutter:
     - family: WillBuyItIcons
       fonts:
         - asset: lib/assets/fonts/WillBuyItIcons.ttf
+  assets: 
+    - lib/assets/google_fonts/
+

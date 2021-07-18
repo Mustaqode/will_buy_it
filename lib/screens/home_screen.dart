@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return buildWishListItems(context, state.items);
                     }
                   } else {
-                    return SnackBar(content: Text("s"));
+                    return Loader();
                   }
                 },
               )),

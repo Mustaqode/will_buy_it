@@ -24,6 +24,7 @@ class Strings {
   static const String hintCost = '0.00';
   static const String hintAddAProductLink = 'Optional: Add a product link';
 
+  static const String errorInvalidUrl = 'The URL you have given is invalid!';
   static const String errorEmptyTextField = 'Please enter something readable!';
   static const String errorUnknown =
       'Something is wrong. Please try that again!';

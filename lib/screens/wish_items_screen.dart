@@ -154,7 +154,12 @@ class WishItemsScreen extends StatelessWidget {
                     ProviderManager.getAllWishListItems(context);
                   },
                   onUrlClicked: () async {
-                    await launch(wishItem.itemUrl!);
+                    try {
+                      await launch(wishItem.itemUrl!);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          getSnackBar(true, Strings.errorInvalidUrl));
+                    }
                   }),
             ))
       ],
