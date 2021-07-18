@@ -36,6 +36,20 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.attach_money, color: Colors.white),
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (_) => CurrencyChooserBottomSheet((currency) {
+                          ProviderManager.changeCurrency(context, currency);
+                          ProviderManager.getTotalCostOfAllWishLists(
+                              context, null);
+                        }));
+              })
+        ],
         centerTitle: true,
         title: Text(
           Strings.appTitle,
@@ -79,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return buildWishListItems(context, state.items);
                     }
                   } else {
-                    return Loader();
+                    return SnackBar(content: Text("s"));
                   }
                 },
               )),

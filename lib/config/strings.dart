@@ -13,6 +13,7 @@ class Strings {
 
   static const String titleNewProduct = 'New Product';
   static const String titleNewWishList = 'New Wish List';
+  static const String titleChooseACurrency = 'Choose a currency';
 
   static const String tagEmptyWishListPage = 'May all your wishes come true!';
 

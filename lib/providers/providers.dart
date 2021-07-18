@@ -10,19 +10,20 @@ import 'package:will_buy_it/repository/wish_repo.dart';
 
 final dbManagerProvider = Provider<DbManager>((ref) => DbManagerImpl());
 
-final sharedPreferenceProvider = FutureProvider<SharedPreferences>((_) async {
-  final preferences = await SharedPreferences.getInstance();
-  return preferences;
+final sharedPreferenceProvider = FutureProvider<SharedPreferences>((ref) async {
+  return await SharedPreferences.getInstance();
 });
 
 final preferenceManagerProvider = Provider<PreferenceManager>((ref) {
-  var sharedPref = ref.watch(sharedPreferenceProvider).data?.value;
+  final sharedPref = ref.watch(sharedPreferenceProvider.future);
   return PreferenceManagerImpl(sharedPref);
 });
 
-final wishListRepositoryProvider = Provider<WishRepository>((ref) =>
-    WishRepositoryImpl(
-        ref.read(dbManagerProvider), ref.read(preferenceManagerProvider)));
+final wishListRepositoryProvider = Provider<WishRepository>((ref) {
+  final dbManager = ref.watch(dbManagerProvider);
+  final preferenceManager = ref.watch(preferenceManagerProvider);
+  return WishRepositoryImpl(dbManager, preferenceManager);
+});
 
 final wishListItemsNotifierProvider = StateNotifierProvider(
     (ref) => WishListItemNotifier(ref.watch(wishListRepositoryProvider)));

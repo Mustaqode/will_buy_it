@@ -1,25 +1,26 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:will_buy_it/config/constants.dart';
-import 'package:will_buy_it/config/enums.dart';
 
 abstract class PreferenceManager {
-  String getCurrentCurrency();
+  Future<String> getCurrentCurrency();
 
-  Future<bool>? storePreferredCurrency(String currency);
+  void storePreferredCurrency(String currency);
 }
 
 class PreferenceManagerImpl extends PreferenceManager {
-  SharedPreferences? preferences;
+  Future<SharedPreferences>? preferences;
 
   PreferenceManagerImpl(this.preferences);
 
   @override
-  String getCurrentCurrency() {
-    return preferences?.getString(Constants.key_currency) ?? Constants.dollar;
+  Future<String> getCurrentCurrency() async {
+    var prefs = await preferences;
+    return prefs?.getString(Constants.key_currency) ?? Constants.rupee;
   }
 
   @override
-  Future<bool>? storePreferredCurrency(String currency) {
-    return preferences?.setString(Constants.key_currency, currency);
+  void storePreferredCurrency(String currency) async {
+    var prefs = await preferences;
+    prefs?.setString(Constants.key_currency, currency);
   }
 }

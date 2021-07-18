@@ -13,7 +13,7 @@ class WishListItemNotifier extends StateNotifier<ViewState> {
     try {
       state = Loading();
       final wishListItems = await wishListRepository.getAllWishListItem();
-      final currency = wishListRepository.getCurrentCurrency();
+      final currency = await wishListRepository.getCurrentCurrency();
       List<WishListItem> _wishListItems = [];
       wishListItems.forEach((element) {
         _wishListItems.add(element.edit(currency: currency));
@@ -90,5 +90,12 @@ class WishListItemNotifier extends StateNotifier<ViewState> {
     } catch (e) {
       state = Error("Some error");
     }
+  }
+
+  Future<void> changeCurrency(String currency) async {
+    wishListRepository.changeCurrency(currency);
+    Future.delayed(Duration(milliseconds: 1000), () {
+      getAllWishListItems();
+    });
   }
 }

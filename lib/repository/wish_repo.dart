@@ -24,11 +24,13 @@ abstract class WishRepository {
 
   Future<void> deleteAWishItem(WishItem key);
 
-  String getAllWishesCost(List<WishListItem> wishList);
+  Future<String> getAllWishesCost(List<WishListItem> wishList);
 
-  String getCostOfAllItemsOfAWishList(List<WishItem> wishList);
+  Future<String> getCostOfAllItemsOfAWishList(List<WishItem> wishList);
 
-  String getCurrentCurrency();
+  Future<String> getCurrentCurrency();
+
+  void changeCurrency(String currency);
 }
 
 class WishRepositoryImpl extends WishRepository {
@@ -48,8 +50,8 @@ class WishRepositoryImpl extends WishRepository {
   }
 
   @override
-  String getAllWishesCost(List<WishListItem> wishList) {
-    String currency = preferenceManager.getCurrentCurrency();
+  Future<String> getAllWishesCost(List<WishListItem> wishList) async {
+    String currency = await preferenceManager.getCurrentCurrency();
     var totalCost = 0.0;
     wishList.forEach((element) {
       totalCost = totalCost + element.totalListItemCost;
@@ -58,8 +60,9 @@ class WishRepositoryImpl extends WishRepository {
   }
 
   @override
-  String getCostOfAllItemsOfAWishList(List<WishItem> wishItemList) {
-    String currency = preferenceManager.getCurrentCurrency();
+  Future<String> getCostOfAllItemsOfAWishList(
+      List<WishItem> wishItemList) async {
+    String currency = await preferenceManager.getCurrentCurrency();
     var totalCost = 0.0;
     wishItemList.forEach((element) {
       totalCost = totalCost + element.itemCost;
@@ -84,7 +87,7 @@ class WishRepositoryImpl extends WishRepository {
   }
 
   @override
-  String getCurrentCurrency() {
+  Future<String> getCurrentCurrency() async {
     return preferenceManager.getCurrentCurrency();
   }
 
@@ -169,5 +172,10 @@ class WishRepositoryImpl extends WishRepository {
     final _wishItem =
         wishItem.edit(isWishFullfilled: !wishItem.isWishFullfilled);
     return dbManager.addOrUpdateAWish(_wishItem, null);
+  }
+
+  @override
+  void changeCurrency(String currency) {
+    preferenceManager.storePreferredCurrency(currency);
   }
 }

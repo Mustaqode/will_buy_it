@@ -66,4 +66,10 @@ class ProviderManager {
         .read(wishListItemsNotifierProvider.notifier)
         .addAWishListItem(wishListItem, key);
   }
+
+  static changeCurrency(BuildContext context, String currency) {
+    context
+        .read(wishListItemsNotifierProvider.notifier)
+        .changeCurrency(currency);
+  }
 }

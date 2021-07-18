@@ -8,3 +8,4 @@ export 'loader.dart';
 export 'platform_specific/alert_dialog.dart';
 export 'platform_specific/cupertino_alert_dialog.dart';
 export 'snackbar.dart';
+export 'currency_chooser_widget.dart';

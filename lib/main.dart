@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -21,6 +22,9 @@ void main() async {
 
   await Hive.openBox<WishListItem>(Constants.wishListBox);
   await Hive.openBox<WishItem>(Constants.wishItemBox);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Palette.colorPrimary,
+      systemNavigationBarColor: Palette.cardColorBought));
   runApp(WillBuyIt());
 }
 

@@ -12,7 +12,7 @@ class WishItemsNotifier extends StateNotifier<ViewState> {
     try {
       state = Loading();
       final wishItems = await wishListRepository.getAllWishItemOfTheList(key);
-      final currency = wishListRepository.getCurrentCurrency();
+      final currency = await wishListRepository.getCurrentCurrency();
       List<WishItem> _wishItems = [];
       wishItems.forEach((element) {
         _wishItems.add(element.edit(currency: currency));
