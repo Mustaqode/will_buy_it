@@ -22,7 +22,7 @@ class AlertDialogg extends StatelessWidget {
     return AlertDialog(
       title: Text(
         title,
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
       content: Text(
         message,
@@ -37,7 +37,10 @@ class AlertDialogg extends StatelessWidget {
             },
             child: Text(
               positiveButtonText,
-              style: TextStyle(color: Palette.colorPrimary, fontSize: 16),
+              style: TextStyle(
+                color: Palette.colorPrimary,
+                fontSize: 18,
+              ),
             )),
         TextButton(
             onPressed: () {
@@ -45,7 +48,10 @@ class AlertDialogg extends StatelessWidget {
             },
             child: Text(
               negativeButtonText,
-              style: TextStyle(color: Palette.colorPrimary, fontSize: 16),
+              style: TextStyle(
+                color: Palette.colorPrimary,
+                fontSize: 18,
+              ),
             ))
       ],
     );
